@@ -63,7 +63,7 @@ theme = "hugo-icarus-theme"
 
 # Enter a link for the follow button on the left
 [params.profile]
-    follow_button = "https://github.com/digitalcraftsman"
+    follow_button = "https://github.com/rwanjohi"
 
 
 [social]
@@ -97,7 +97,7 @@ theme = "hugo-icarus-theme"
     facebook        = ""
     facebook_admin  = ""
     twitter_domain  = ""
-    twitter         = "spf13"
+    twitter         = ""
 
 # Enable and disable widgets for the right sidebar
 [params.widgets]
