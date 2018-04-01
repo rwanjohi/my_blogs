@@ -57,5 +57,7 @@ $y = b_{0} + b_{1}x_{1} + b_{2}x_{2}+ \cdots     b_{m}x_{m}$
 
 
 
-
+```{r echo= False}
+hist(iris[[2]])
+```
 
