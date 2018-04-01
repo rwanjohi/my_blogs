@@ -15,10 +15,11 @@ images: []
 menu: ''
 ---
 > Here we go!
+
 # Problems:
 * Classification
-+ Binary
-+ Multi-Class
+   + Binary
+   + Multi-Class
 
 * Regression 
 
