@@ -27,6 +27,6 @@ import pandas as pd
 
 ```
 
-# Introduction:
+**Introduction**:
 
 Time series data involves data collected sequentially in time...
