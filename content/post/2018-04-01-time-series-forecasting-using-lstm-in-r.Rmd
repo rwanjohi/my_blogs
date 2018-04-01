@@ -26,3 +26,7 @@ This is an introduction of Time Series forecasting....
 import pandas as pd
 
 ```
+
+# Introduction:
+
+Time series data involves data collected sequentially in time...
