@@ -24,6 +24,21 @@ menu: ''
    + Multi-Class- More than 2 outcomes
       + e.g. Positive, Neutral, Negative  customer sentiment/feedback
 
-* Regression 
+* Regression: The target is quantitative (discrete or continuous) 
+   + Can take any real number in Real line
+      + e.g. Stock prices, estimated revenue, interest rates, price of house, Number of accidents 
+
+   
+# Others:
+* Clustering
+* Dimension reduction
+
+
+Some notations:\\
+* M: Number of predictors/features/ independent variables
+* N: Number of records/rows/observations/instances
+* n: sample size 
+
+
 
 <!--more-->
