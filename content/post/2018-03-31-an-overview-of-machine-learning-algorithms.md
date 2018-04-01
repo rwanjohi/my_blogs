@@ -64,3 +64,16 @@ Before we proceed here are some notations:
 hist(iris[[2]])
 ```
 
+```r
+hist(iris[[2]])
+
+
+```
+
+```python
+import pandas as pd
+
+```
+
+
+
