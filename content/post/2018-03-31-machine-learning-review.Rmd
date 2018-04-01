@@ -1,0 +1,15 @@
+---
+title: Machine Learning Review
+author: Richard Wanjohi, Ph.D
+date: '2018-03-31'
+slug: machine-learning-review
+categories:
+  - Machine Learning
+tags:
+  - Keras
+  - Python
+  - R
+  - Pandas
+  - Sklearn
+---
+
