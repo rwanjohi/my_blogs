@@ -14,9 +14,12 @@ description: ''
 images: []
 menu: ''
 ---
-# Problems:\\
-1. Classification
+> Here we go!
+# Problems:
+* Classification
 + Binary
 + Multi-Class
+
+* Regression 
 
 <!--more-->
