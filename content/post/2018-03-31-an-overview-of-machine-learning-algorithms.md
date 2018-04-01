@@ -34,7 +34,7 @@ menu: ''
 * Dimension reduction
 
 
-Some notations:\\
+beforre we proceed here are some notations:
 * M: Number of predictors/features/ independent variables
 * N: Number of records/rows/observations/instances
 * n: sample size 
