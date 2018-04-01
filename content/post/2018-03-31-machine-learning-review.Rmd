@@ -10,12 +10,6 @@ tags:
 - Pandas
 - Sklearn
 categories: Machine Learning
-
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
 ---
 
 ```{python}
@@ -26,3 +20,11 @@ import pandas as pd
 hist(iris[[2]])
 ```
 
+```{r qplot, fig.width= 4, message=FALSE}
+
+library('ggplot2')
+summary(cars)
+qplot(speed, dist, data = cars) +
+  geom_smooth()
+
+```
