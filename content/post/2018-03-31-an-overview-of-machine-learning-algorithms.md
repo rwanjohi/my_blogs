@@ -37,12 +37,26 @@ menu: ''
 * Clustering
 * Dimension reduction
 
+***
 
-beforre we proceed here are some notations:
+Before we proceed here are some notations:
 * M: Number of predictors/features/ independent variables
 * N: Number of records/rows/observations/instances
 * n: sample size 
 
 
+# Linear Regression:
 
-<!--more-->
+* For continuous target variable
+* Relationship between the  target and predictors variables is established by fitting a best line fit
+
+$$ y = b_{0} + b_{1}x_{1} + b_{2}x_{2}+ \cdots     b_{m}x_{m} $$
+
+*Pros:
+  + Simple, easy to understand
+  + Works most of the cases
+
+
+
+
+
