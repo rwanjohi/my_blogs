@@ -20,7 +20,7 @@ theme = "hugo-icarus-theme"
     # Tell me who you are
     author = "Richard Wanjohi, Ph.D"
     bio = "Data Scientist"
-    location = "Kansas City"
+    location = "Kansas City, Missouri"
     site_description = ""
     copyright  = "Powered by [Hugo](//gohugo.io). Theme by [PPOffice](http://github.com/ppoffice)."
     avatar = "img/prof1.jpg" # "css/images/avatar.png"
