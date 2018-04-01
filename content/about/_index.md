@@ -12,7 +12,7 @@ My goal, always, is to extract and deliver meaningful, solution focused and key 
 I employ Statistical and Machine Learning models to extract the aforementioned insights. I have vast experience in developing, modeling, and implementing these crucial methodologies and techniques 
 
 **************
-Research Interests: Machine Learning, Bayesian Inference, Time Series analysis, State Space Models, Sequential Monte Carlo Methods
+Research Interests:\ Machine Learning, Bayesian Inference, Time Series analysis, State Space Models, Sequential Monte Carlo Methods
 
 **************
 
@@ -22,3 +22,6 @@ Analytics Platforms: KNIME, SAS Enterprise Miner, IBM SPSS Modeler, Alteryx
 Data visualization: Tableau, Power BI
 
 $$ f(x) = \int $$
+
+
+
