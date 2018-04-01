@@ -9,5 +9,10 @@ tags:
   - Keras
   - R
   - Tensorflow
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
 ---
 
