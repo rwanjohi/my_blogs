@@ -1,15 +1,22 @@
 ---
-title: Machine Learning Review
-author: Richard Wanjohi, Ph.D
+title: "Machine Learning Review"
+author: "Richard Wanjohi, Ph.D"
 date: '2018-03-31'
 slug: machine-learning-review
-categories:
-  - Machine Learning
 tags:
-  - Keras
-  - Python
-  - R
-  - Pandas
-  - Sklearn
+- Keras
+- Python
+- R
+- Pandas
+- Sklearn
+categories: Machine Learning
 ---
+
+```{python}
+import pandas as pd
+```
+
+```{r, echo=FALSE}
+hist(iris[[2]])
+```
 
