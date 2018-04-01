@@ -16,10 +16,13 @@ menu: ''
 ---
 > Here we go!
 
+***
 # Problems:
-* Classification
-   + Binary
-   + Multi-Class
+* Classification: The target variable is qualitative (categorical/nominal)
+   + Binary- Two possible outcomes only
+      + e.g. Yes/No, 0/1
+   + Multi-Class- More than 2 outcomes
+      + e.g. Positive, Neutral, Negative  customer sentiment/feedback
 
 * Regression 
 
