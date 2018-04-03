@@ -24,18 +24,18 @@ menu: ''
 
 ***
 # Problems:
-* Classification: The target variable is qualitative (categorical/nominal)
+* Classification problem: The target variable is qualitative (categorical/nominal)
    + Binary- Two possible outcomes only
       + e.g. Yes/No, 0/1
    + Multi-Class- More than 2 outcomes
       + e.g. Positive, Neutral, Negative  customer sentiment/feedback
 
-* Regression: The target is quantitative (discrete or continuous) 
+* Regression problem: The target is quantitative (discrete or continuous) 
    + Can take any real number in Real line
       + e.g. Stock prices, estimated revenue, interest rates, price of house, Number of accidents 
 
    
-# Others:
+### Others:
 * Clustering
 * Dimension reduction
 
@@ -76,5 +76,38 @@ hist(iris[[2]])
 import pandas as pd
 
 ```
+
+## 2. Logistic Regression
+
+
+
+
+## 3. Classification and Regression Trees (Decision Tree)
+
+
+
+## 4. Naive Bayes
+
+
+
+
+## 5. Ensembles
+
+* Random Forest
+
+* Boosted Trees
+  + Adaptive boosting
+  + Gradient Boosting
+    * Gradient boost
+    * XGBoost
+    * Catboost
+    
+## 6. Support Vector Machine (SVM)
+
+
+
+## 7. K-nearest neigbour (KNN)
+
+
 
 
