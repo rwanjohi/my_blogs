@@ -48,7 +48,7 @@ Before we proceed here are some notations:
 * n: sample size 
 
 
-## Linear Regression:
+## 1. Linear Regression:
 
 * For continuous target variable
 * Relationship between the  target and predictors variables is established by fitting a best line fit
