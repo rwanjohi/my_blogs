@@ -1,0 +1,13 @@
+---
+title: Time Series Forecasting using LSTM in R
+author: Richard Wanjohi, Ph.D
+date: '2018-04-03'
+slug: time-series-forecasting-using-lstm-in-r
+categories:
+  - Deep Learning
+tags:
+  - Keras
+  - R
+  - Tensorflow
+---
+
