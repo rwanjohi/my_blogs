@@ -55,4 +55,10 @@ cor(x, y)
 ```
 
 There are `r nrow(iris)` individuals.
+now the 
+```python
+import pandas as pd
+```
+
+
 
