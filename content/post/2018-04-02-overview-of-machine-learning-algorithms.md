@@ -77,7 +77,12 @@ import pandas as pd
 
 ```
 
+`$S_n = \sum_{i=1}^n X_i$`
+
+
 ## 2. Logistic Regression
+This is a classification algorithm. It predicts the probability p of an event 
+Odds = p/(1-p).  Log odds (logit) of p is modeled as linear combination of the predictors
 
 
 
