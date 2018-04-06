@@ -51,7 +51,7 @@ theme = "hugo-icarus-theme"
     label  = "Home"
     link   = "/"
 
-[[params.menu]]
+#[[params.menu]]
 #    before = false
 #    label  = "Tags"
 #    link   = "tags/"
