@@ -5,8 +5,9 @@ menu = "main"
 disable_comments = true
 +++
 
-I am a Data Scientist...
-![My picture](img/prof1.jpg)
+This website is a subsidiary, and only meant for blogs/articles etc..
+This [link](https://rwanjohi.github.io/index.html) will direct you to my regural website 
+
 
 
 
