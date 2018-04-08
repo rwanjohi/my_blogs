@@ -56,10 +56,10 @@ theme = "hugo-icarus-theme"
 #    label  = "Tags"
 #    link   = "tags/"
 
-[[params.menu]]
-    before = false
-    label  = "Projects"
-    link   = "categories/"
+#[[params.menu]]
+#    before = false
+#    label  = "Projects"
+#    link   = "categories/"
 
 # Enter a link for the follow button on the left
 [params.profile]
