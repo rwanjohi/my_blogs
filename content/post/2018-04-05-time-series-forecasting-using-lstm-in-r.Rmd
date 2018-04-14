@@ -171,3 +171,8 @@ Let's look at the model summary
 ```{r}
 summary(model)
 ```
+
+
+
+Get the entire code in [my git repo](https://github.com/rwanjohi/Keras-in-R)
+
