@@ -19,8 +19,10 @@ output:
 
 <div id="TOC">
 <ul>
+<li><a href="#load-the-dataset">Load the dataset</a></li>
 <li><a href="#supervised-learning">Supervised Learning</a></li>
 <li><a href="#differencing">Differencing</a></li>
+<li><a href="#define-the-model">Define the model</a></li>
 <li><a href="#compile-the-model">Compile the model</a></li>
 </ul>
 </div>
@@ -30,9 +32,16 @@ output:
 <hr />
 <pre class="r"><code>library(keras)
 library(tensorflow)</code></pre>
+<div id="load-the-dataset" class="section level1">
+<h1>Load the dataset</h1>
+<pre class="r"><code>df = read.table(&#39;E:/shampoo.csv&#39;, sep = &#39;,&#39;, header = TRUE, na.strings = &#39;NULL&#39;)
+dim(df)
+names(df)
+head(df)
+summary(df)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.9065268</code></pre>
-<p>the estimated correlation is 0.9065268 and that is a good thing….</p>
+<pre><code>## [1] 0.8920564</code></pre>
+<p>the estimated correlation is 0.8920564 and that is a good thing….</p>
 <pre class="r"><code>lags &lt;- function(x, k){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
@@ -44,6 +53,7 @@ library(tensorflow)</code></pre>
 <blockquote>
 <p>by the look of things</p>
 </blockquote>
+</div>
 <div id="supervised-learning" class="section level1">
 <h1>Supervised Learning</h1>
 <p>Transform the series into supervised learning</p>
@@ -52,20 +62,17 @@ library(tensorflow)</code></pre>
 <h1>Differencing</h1>
 <p>For stationarity</p>
 </div>
-<div id="compile-the-model" class="section level1">
-<h1>Compile the model</h1>
+<div id="define-the-model" class="section level1">
+<h1>Define the model</h1>
 <pre class="r"><code>model &lt;- keras_model_sequential() 
 model%&gt;%
   layer_lstm(neurons, batch_input_shape = c(batch_size, X_shape2, X_shape3), stateful= TRUE)%&gt;%
-  layer_dense(units = 1)
-
-
-
-model %&gt;% compile(
-  loss = &#39;mean_squared_error&#39;,
-  optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  #  optimizer_sgd(lr = 0.02),
-  metrics = c(&#39;accuracy&#39;)
-)</code></pre>
+  layer_dense(units = 1)</code></pre>
+</div>
+<div id="compile-the-model" class="section level1">
+<h1>Compile the model</h1>
+<p>model %&gt;% compile( loss = ‘mean_squared_error’, optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ), # optimizer_sgd(lr = 0.02), metrics = c(‘accuracy’) )</p>
+<p>```</p>
 <p>Let’s look at the model summary</p>
 <pre class="r"><code>summary(model)</code></pre>
 <pre><code>## ___________________________________________________________________________

@@ -29,7 +29,15 @@ library(tensorflow)
 
 ```
 
+# Load the dataset
+```{r, results= 'hide'}
+df = read.table('E:/shampoo.csv', sep = ',', header = TRUE, na.strings = 'NULL')
+dim(df)
+names(df)
+head(df)
+summary(df)
 
+```
 
 
 
@@ -68,14 +76,8 @@ Transform the series into supervised learning
 
 For stationarity 
 
-# Compile the model
+# Define the model
 ```{r, include= FALSE}
-df = read.table('E:/shampoo.csv', sep = ',', header = TRUE, na.strings = 'NULL')
-dim(df)
-names(df)
-head(df)
-summary(df)
-
 df$Month <- as.Date(df$Month, format = '%m-%d')
 plot(df, type = 'l')
 # obtain the series
@@ -155,7 +157,9 @@ model <- keras_model_sequential()
 model%>%
   layer_lstm(neurons, batch_input_shape = c(batch_size, X_shape2, X_shape3), stateful= TRUE)%>%
   layer_dense(units = 1)
+```
 
+# Compile the model
 
 
 model %>% compile(
