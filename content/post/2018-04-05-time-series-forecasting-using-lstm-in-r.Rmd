@@ -16,6 +16,7 @@ output:
     dev: "svg"
 ---
 
+Under construction!!! 
 the page `is good` but the `output` not soo good 
 
 <!--more-->
@@ -179,6 +180,7 @@ Let's look at the model summary
 summary(model)
 ```
 
+$$ \bar{x} =  \sum_{i}^{n} x_i $$
 
 
 Get the entire code in [my git repo](https://github.com/rwanjohi/Keras-in-R)

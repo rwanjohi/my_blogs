@@ -27,7 +27,7 @@ output:
 </ul>
 </div>
 
-<p>the page <code>is good</code> but the <code>output</code> not soo good</p>
+<p>Under construction!!! the page <code>is good</code> but the <code>output</code> not soo good</p>
 <!--more-->
 <hr />
 <p>Time series data is data collected sequentially in time.</p>
@@ -42,8 +42,8 @@ names(df)
 head(df)
 summary(df)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.8974685</code></pre>
-<p>the estimated correlation is 0.8974685 and that is a good thing….</p>
+<pre><code>## [1] 0.910925</code></pre>
+<p>the estimated correlation is 0.910925 and that is a good thing….</p>
 <pre class="r"><code>lags &lt;- function(x, k){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
@@ -91,5 +91,6 @@ model%&gt;%
 ## Trainable params: 101
 ## Non-trainable params: 0
 ## ___________________________________________________________________________</code></pre>
+<p><span class="math display">\[ \bar{x} =  \sum_{i}^{n} x_i \]</span></p>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
