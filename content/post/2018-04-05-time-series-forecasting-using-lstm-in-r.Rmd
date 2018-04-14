@@ -22,7 +22,7 @@ the page `is good` but the `output` not soo good
 <!--more-->
 
 ***
-Time series involves data collected sequentially in time. I denote univariate data by `$$ y_{t} \in \mathbb{R} $$`  where `$$ t \in \mathcal{T} $$` is the time indexing when the data was observed. The time ``t`` can be discrete in which case `$$ \mathcal{T} = \mathbb{Z}$$` or continuous  where now `$$ \mathcal{T} = \mathbb{R}$$`. For simplicity of the analysis we will consider only discrete time series.
+Time series involves data collected sequentially in time. I denote univariate data by $$ y_{t} \in \mathbb{R} $$  where `$$ t \in \mathcal{T} $$` is the time indexing when the data was observed. The time ``t`` can be discrete in which case `$$ \mathcal{T} = \mathbb{Z}$$` or continuous  where now `$$ \mathcal{T} = \mathbb{R}$$`. For simplicity of the analysis we will consider only discrete time series.
 
 Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies.
 
