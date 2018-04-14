@@ -22,8 +22,9 @@ the page `is good` but the `output` not soo good
 ***
 
 
-```{r, echo=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(keras)
+
 library(tensorflow)
 
 ```
