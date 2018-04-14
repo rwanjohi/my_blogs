@@ -19,9 +19,18 @@ output:
 
 
 <p>the page <code>is good</code> but the <code>output</code> not soo good</p>
+<!--more-->
 <hr />
 <pre class="r"><code>library(keras)
-
 library(tensorflow)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.909689</code></pre>
+<pre><code>## [1] 0.895613</code></pre>
+<p>the estimated correlation is 0.895613 and that is a good thing….</p>
+<pre class="r"><code>lags &lt;- function(x, k){
+    
+      lagged =  c(rep(NA, k), x[1:(length(x)-k)])
+      DF = as.data.frame(cbind(lagged, x))
+      colnames(DF) &lt;- c( paste0(&#39;x-&#39;, k), &#39;x&#39;)
+      DF[is.na(DF)] &lt;- 0
+      return(DF)
+}</code></pre>

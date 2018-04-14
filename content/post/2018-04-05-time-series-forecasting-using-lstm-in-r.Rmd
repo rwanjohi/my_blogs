@@ -18,13 +18,13 @@ output:
 
 the page `is good` but the `output` not soo good 
 
+<!--more-->
 
 ***
 
 
 ```{r, warning=FALSE, message=FALSE}
 library(keras)
-
 library(tensorflow)
 
 ```
@@ -42,4 +42,18 @@ y <- 2*x + rnorm(100)
 cor(x, y)
 ```
 
+the estimated correlation is `r cor(x, y)` and that is a good thing....
+
+
+```{r, results="hide"}
+
+lags <- function(x, k){
+    
+      lagged =  c(rep(NA, k), x[1:(length(x)-k)])
+      DF = as.data.frame(cbind(lagged, x))
+      colnames(DF) <- c( paste0('x-', k), 'x')
+      DF[is.na(DF)] <- 0
+      return(DF)
+}
+```
 
