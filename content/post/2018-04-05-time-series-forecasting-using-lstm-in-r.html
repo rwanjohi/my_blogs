@@ -24,8 +24,8 @@ output:
 <pre class="r"><code>library(keras)
 library(tensorflow)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.895613</code></pre>
-<p>the estimated correlation is 0.895613 and that is a good thing….</p>
+<pre><code>## [1] 0.8858275</code></pre>
+<p>the estimated correlation is 0.8858275 and that is a good thing….</p>
 <pre class="r"><code>lags &lt;- function(x, k){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
