@@ -32,7 +32,7 @@ library(tensorflow)
 
 ```
 
-# Load the dataset
+## Load the dataset
 ```{r, results= 'hide'}
 df = read.table('E:/shampoo.csv', sep = ',', header = TRUE, na.strings = 'NULL')
 dim(df)
@@ -71,15 +71,15 @@ lags <- function(x, k){
 > by the look of things
 
 
-# Supervised Learning
+## Supervised Learning
 
 Transform the series into supervised learning
 
-# Differencing 
+## Differencing 
 
 For stationarity 
 
-# Define the model
+## Define the model
 ```{r, include= FALSE}
 df$Month <- as.Date(df$Month, format = '%m-%d')
 plot(df, type = 'l')
@@ -162,7 +162,7 @@ model%>%
   layer_dense(units = 1)
 ```
 
-# Compile the model
+## Compile the model
 
 ``` {r}
 model %>% compile(
