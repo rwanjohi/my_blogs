@@ -17,6 +17,13 @@ output:
 ---
 
 
+<div id="TOC">
+<ul>
+<li><a href="#supervised-learning">Supervised Learning</a></li>
+<li><a href="#differencing">Differencing</a></li>
+<li><a href="#compile-the-model">Compile the model</a></li>
+</ul>
+</div>
 
 <p>the page <code>is good</code> but the <code>output</code> not soo good</p>
 <!--more-->
@@ -24,8 +31,8 @@ output:
 <pre class="r"><code>library(keras)
 library(tensorflow)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.8858275</code></pre>
-<p>the estimated correlation is 0.8858275 and that is a good thing….</p>
+<pre><code>## [1] 0.8924294</code></pre>
+<p>the estimated correlation is 0.8924294 and that is a good thing….</p>
 <pre class="r"><code>lags &lt;- function(x, k){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
@@ -34,3 +41,42 @@ library(tensorflow)</code></pre>
       DF[is.na(DF)] &lt;- 0
       return(DF)
 }</code></pre>
+<blockquote>
+<p>by the look of things</p>
+</blockquote>
+<div id="supervised-learning" class="section level1">
+<h1>Supervised Learning</h1>
+<p>Transform the series into supervised learning</p>
+</div>
+<div id="differencing" class="section level1">
+<h1>Differencing</h1>
+<p>For stationarity</p>
+</div>
+<div id="compile-the-model" class="section level1">
+<h1>Compile the model</h1>
+<pre class="r"><code>model &lt;- keras_model_sequential() 
+model%&gt;%
+  layer_lstm(neurons, batch_input_shape = c(batch_size, X_shape2, X_shape3), stateful= TRUE)%&gt;%
+  layer_dense(units = 1)
+
+
+
+model %&gt;% compile(
+  loss = &#39;mean_squared_error&#39;,
+  optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  #  optimizer_sgd(lr = 0.02),
+  metrics = c(&#39;accuracy&#39;)
+)</code></pre>
+<p>Let’s look at the model summary</p>
+<pre class="r"><code>summary(model)</code></pre>
+<pre><code>## ___________________________________________________________________________
+## Layer (type)                     Output Shape                  Param #     
+## ===========================================================================
+## lstm_1 (LSTM)                    (1, 4)                        96          
+## ___________________________________________________________________________
+## dense_1 (Dense)                  (1, 1)                        5           
+## ===========================================================================
+## Total params: 101
+## Trainable params: 101
+## Non-trainable params: 0
+## ___________________________________________________________________________</code></pre>
+</div>

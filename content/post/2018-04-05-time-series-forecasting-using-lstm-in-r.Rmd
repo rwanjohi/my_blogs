@@ -57,3 +57,117 @@ lags <- function(x, k){
 }
 ```
 
+> by the look of things
+
+
+# Supervised Learning
+
+Transform the series into supervised learning
+
+# Differencing 
+
+For stationarity 
+
+# Compile the model
+```{r, include= FALSE}
+df = read.table('E:/shampoo.csv', sep = ',', header = TRUE, na.strings = 'NULL')
+dim(df)
+names(df)
+head(df)
+summary(df)
+
+df$Month <- as.Date(df$Month, format = '%m-%d')
+plot(df, type = 'l')
+# obtain the series
+Series = df$Sales
+
+L = length(Series)
+# transform data to stationarity
+diffed = diff(Series, differences = 1)
+
+
+# create a lagged dataset, i.e to be supervised learning
+
+lags <- function(x, k){
+    
+      lagged =  c(rep(NA, k), x[1:(length(x)-k)])
+      DF = as.data.frame(cbind(lagged, x))
+      colnames(DF) <- c( paste0('x-', k), 'x')
+      DF[is.na(DF)] <- 0
+      return(DF)
+}
+
+
+supervised = lags(diffed, 1)
+
+
+## split into train and test sets
+
+N = nrow(supervised)
+n = round(N *0.66, digits = 0)
+train = supervised[1:n, ]
+test  = supervised[(n+1):N,  ]
+
+
+## scale data
+normalize <- function(x, feature_range = c(0, 1)) {
+  stdz = ((x - min(x)) / (max(x) - min(x)))
+  mins = feature_range[1]
+  maxs = feature_range[2]
+  minima = min(x)
+  maxima = max(x)
+  scaledz = stdz *(maxs -mins) + mins
+  
+  return( list(scores = as.vector(scaledz), scaler= c(min =minima, max = maxima)) )
+  
+}
+
+
+
+scaled_train =  normalize(train, c(-1, 1))
+scaled_test  = normalize(test, c(-1, 1))
+
+y_train = scaled_train$scores[, 2]
+x_train = scaled_train$scores[, 1]
+
+y_test = scaled_test$scores[, 2]
+x_test = scaled_test$scores[, 1]
+
+## fit the model
+
+neurons = 4
+dim(x_train)
+
+dim(x_train) <- c(length(x_train), 1, 1)
+dim(x_train)
+X_shape2 = dim(x_train)[2]
+X_shape3 = dim(x_train)[3]
+batch_size = 1
+
+```
+
+
+
+
+```{r, results= 'hide'}
+
+model <- keras_model_sequential() 
+model%>%
+  layer_lstm(neurons, batch_input_shape = c(batch_size, X_shape2, X_shape3), stateful= TRUE)%>%
+  layer_dense(units = 1)
+
+
+
+model %>% compile(
+  loss = 'mean_squared_error',
+  optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  #  optimizer_sgd(lr = 0.02),
+  metrics = c('accuracy')
+)
+
+```
+
+Let's look at the model summary
+
+```{r}
+summary(model)
+```
