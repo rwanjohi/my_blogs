@@ -30,6 +30,8 @@ output:
 <p>the page <code>is good</code> but the <code>output</code> not soo good</p>
 <!--more-->
 <hr />
+<p>Time series data is data collected sequentially in time.</p>
+<p>Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies.</p>
 <pre class="r"><code>library(keras)
 library(tensorflow)</code></pre>
 <div id="load-the-dataset" class="section level1">
@@ -40,8 +42,8 @@ names(df)
 head(df)
 summary(df)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.8920564</code></pre>
-<p>the estimated correlation is 0.8920564 and that is a good thing….</p>
+<pre><code>## [1] 0.9218507</code></pre>
+<p>the estimated correlation is 0.9218507 and that is a good thing….</p>
 <pre class="r"><code>lags &lt;- function(x, k){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
@@ -71,8 +73,11 @@ model%&gt;%
 </div>
 <div id="compile-the-model" class="section level1">
 <h1>Compile the model</h1>
-<p>model %&gt;% compile( loss = ‘mean_squared_error’, optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ), # optimizer_sgd(lr = 0.02), metrics = c(‘accuracy’) )</p>
-<p>```</p>
+<pre class="r"><code>model %&gt;% compile(
+  loss = &#39;mean_squared_error&#39;,
+  optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  #  optimizer_sgd(lr = 0.02),
+  metrics = c(&#39;accuracy&#39;)
+)</code></pre>
 <p>Let’s look at the model summary</p>
 <pre class="r"><code>summary(model)</code></pre>
 <pre><code>## ___________________________________________________________________________

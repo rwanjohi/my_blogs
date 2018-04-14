@@ -21,7 +21,10 @@ the page `is good` but the `output` not soo good
 <!--more-->
 
 ***
+Time series data is data collected sequentially in time.
 
+
+Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies.
 
 ```{r, warning=FALSE, message=FALSE}
 library(keras)
@@ -161,7 +164,7 @@ model%>%
 
 # Compile the model
 
-
+``` {r}
 model %>% compile(
   loss = 'mean_squared_error',
   optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  #  optimizer_sgd(lr = 0.02),
