@@ -22,9 +22,17 @@ the page `is good` but the `output` not soo good
 <!--more-->
 
 ***
-Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} \in \mathbb{R} $  where $ t \in \mathcal{T} $ is the time indexing when the data was observed. The time ``t`` can be discrete in which case $ \mathcal{T} = \mathbb{Z}$ or continuous  where now $ \mathcal{T} = \mathbb{R}$. For simplicity of the analysis we will consider only discrete time series.
+Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} \in \mathbb{R}$  where $ t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t$ can be discrete in which case $ \mathcal{T} = \mathbb{Z}$ or continuous  with $ \mathcal{T} = \mathbb{R}$. For simplicity of the analysis we will consider only discrete time series.
 
 Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies.
+
+The time dependence and effects of previous inputs are controlled by an interesting concept called a forget gate, which determines which states are remembered or forgotten. Two other gates, the input gate and output gate, are also featured in LSTM cells.
+
+
+Instead of neurons, LSTM networks have memory blocks that are connected through layers.
+
+A block has components that make it smarter than a classical neuron and a memory for recent sequences. A block contains gates that manage the block's state and output. A block operates upon an input sequence and each gate within a block uses the sigmoid activation units to control whether they are triggered or not, making the change of state and addition of information flowing through the block conditional.
+
 
 ```{r, warning=FALSE, message=FALSE}
 library(keras)
