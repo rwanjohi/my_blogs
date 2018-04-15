@@ -34,17 +34,14 @@ output:
 </ul>
 <div id="diagramatically" class="section level3">
 <h3>Diagramatically…</h3>
-<pre class="r"><code>include_graphics(&#39;E:/gan.png&#39;) </code></pre>
-<p><img src="E:/gan.PNG" width="20%" /></p>
+<hr />
 <p>Given the objective function:</p>
-<p><span class="math display">\[ min_{G} \max_{D} F(G, D) = log(D(x; \phi)) + log(1- D( x^{&#39;}; \phi))
-\]</span> where:</p>
+<p><span class="math display">\[ min_{G} \max_{D} F(G, D) = log(D(x; \phi)) + log(1- D( x^{&#39;}; \phi)) \]</span></p>
+<p>where:</p>
+<p>$ z p_{z}(z) $ is a random sample from distribution $ p_{z}(z) $ and * $ x^{’} = G(z; ) $ * $ x $ is the real data from distribution $ p_{d}(x) $</p>
 <ul>
-<li>$ z p_{z}(z) $ is a random sample from distribution $ p_{z}(z) $</li>
-<li>$ x^{’} = G(z; ) $</li>
-<li><p>$ x $ is the real data from distribution $ p_{d}(x) $</p></li>
 <li>Generator minimizes $  $ by maximazing log $ p(y= true|x^{’}) $</li>
-<li><p>Discriminator maximizes  by maximizing log <span class="math inline">\(p(y= fake|x^{&#39;})\)</span> and $ p(y= true|x) $</p></li>
+<li>Discriminator maximizes  by maximizing log <span class="math inline">\(p(y= fake|x^{&#39;})\)</span> and $ p(y= true|x) $</li>
 </ul>
 <p>The models are trained simultaneously with the goal of obtaining a Nash equilibrium.</p>
 </div>
