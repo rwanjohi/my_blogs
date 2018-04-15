@@ -26,12 +26,6 @@ Time series involves data collected sequentially in time. I denote univariate da
 
 Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies.
 
-The time dependence and effects of previous inputs are controlled by an interesting concept called a forget gate, which determines which states are remembered or forgotten. Two other gates, the input gate and output gate, are also featured in LSTM cells.
-
-
-Instead of neurons, LSTM networks have memory blocks that are connected through layers.
-
-A block has components that make it smarter than a classical neuron and a memory for recent sequences. A block contains gates that manage the block's state and output. A block operates upon an input sequence and each gate within a block uses the sigmoid activation units to control whether they are triggered or not, making the change of state and addition of information flowing through the block conditional.
 
 
 ```{r, warning=FALSE, message=FALSE}

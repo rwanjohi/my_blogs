@@ -27,3 +27,34 @@ output:
 * Through back propagation, the Generator updates its parameters using the output from the Discriminator.
 
 * The two models are trained simultaneously with  the aim that the continuous  competition will help produce data that is indistinguishable from the real data.
+
+### Diagramatically...
+
+```{r, include= FALSE}
+library(knitr)
+```
+
+```{r  out.width = "20%"}
+include_graphics('E:/gan.png') 
+```
+
+
+
+
+Given the objective function:
+
+ $$ min_{G} \max_{D} F(G, D) = log(D(x; \phi)) + log(1- D( x^{'}; \phi))
+$$
+ where:
+
+ * $ z \sim p_{z}(z) $ is a random sample from distribution $ p_{z}(z) $
+ * $ x^{'} = G(z; \theta) $
+ * $ x $ is the real data from distribution $ p_{d}(x) $ 
+
+ *  Generator minimizes $ \eqref{one} $ by maximazing  log $ p(y= true|x^{'}) $
+ *  Discriminator maximizes \eqref{one} by maximizing log $p(y= fake|x^{'})$ and $ p(y= true|x)  $
+
+ The models are trained simultaneously with the  goal of  obtaining a Nash equilibrium.
+
+
+
