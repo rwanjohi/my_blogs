@@ -20,8 +20,10 @@ output:
 <div id="TOC">
 <ul>
 <li><a href="#load-the-dataset">Load the dataset</a></li>
-<li><a href="#supervised-learning">Supervised Learning</a></li>
 <li><a href="#differencing">Differencing</a></li>
+<li><a href="#supervised-learning">Supervised Learning</a></li>
+<li><a href="#split-dataset-into-training-and-testing-sets">Split dataset into training and testing sets</a></li>
+<li><a href="#normalize-the-data">Normalize the data</a></li>
 <li><a href="#define-the-model">Define the model</a></li>
 <li><a href="#compile-the-model">Compile the model</a></li>
 </ul>
@@ -30,39 +32,85 @@ output:
 <p>Under construction!!! the page <code>is good</code> but the <code>output</code> not soo good</p>
 <!--more-->
 <hr />
-<p>Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} $ where $ t  $ is the time indexing when the data was observed. The time $ t$ can be discrete in which case $  = $ or continuous with $  = $. For simplicity of the analysis we will consider only discrete time series.</p>
+<p>Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} $ where $ t  $ is the time indexing when the data was observed. The time $ t$ can be discrete in which case $  = $ or continuous with $  = $. $$, For simplicity of the analysis we will consider only discrete time series.</p>
 <p>Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers.</p>
 <pre class="r"><code>library(keras)
 library(tensorflow)</code></pre>
 <div id="load-the-dataset" class="section level2">
 <h2>Load the dataset</h2>
-<pre class="r"><code>df = read.table(&#39;E:/shampoo.csv&#39;, sep = &#39;,&#39;, header = TRUE, na.strings = &#39;NULL&#39;)
-dim(df)
-names(df)
-head(df)
-summary(df)</code></pre>
-<p>Now lets see something here</p>
-<pre><code>## [1] 0.9003872</code></pre>
-<p>the estimated correlation is 0.9003872 and that is a good thing….</p>
-<pre class="r"><code>lags &lt;- function(x, k){
+<p>First five observations</p>
+<pre><code>##        Month Sales
+## 1 2018-01-01 266.0
+## 2 2018-01-02 145.9
+## 3 2018-01-03 183.1
+## 4 2018-01-04 119.3
+## 5 2018-01-05 180.3
+## 6 2018-01-06 168.5</code></pre>
+</div>
+<div id="differencing" class="section level2">
+<h2>Differencing</h2>
+<p>For stationarity</p>
+<pre class="r"><code># transform data to stationarity
+diffed = diff(Series, differences = 1)
+head(diffed)</code></pre>
+<pre><code>## [1] -120.1   37.2  -63.8   61.0  -11.8   63.3</code></pre>
+</div>
+<div id="supervised-learning" class="section level2">
+<h2>Supervised Learning</h2>
+<p>Transform the series into supervised learning</p>
+<pre class="r"><code># create a lagged dataset
+supervised_transform &lt;- function(x, k= 1){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
       DF = as.data.frame(cbind(lagged, x))
       colnames(DF) &lt;- c( paste0(&#39;x-&#39;, k), &#39;x&#39;)
       DF[is.na(DF)] &lt;- 0
       return(DF)
-}</code></pre>
-<blockquote>
-<p>by the look of things</p>
-</blockquote>
+}
+supervised = supervised_transform(diffed, 1)
+head(supervised)</code></pre>
+<pre><code>##      x-1      x
+## 1    0.0 -120.1
+## 2 -120.1   37.2
+## 3   37.2  -63.8
+## 4  -63.8   61.0
+## 5   61.0  -11.8
+## 6  -11.8   63.3</code></pre>
 </div>
-<div id="supervised-learning" class="section level2">
-<h2>Supervised Learning</h2>
-<p>Transform the series into supervised learning</p>
+<div id="split-dataset-into-training-and-testing-sets" class="section level2">
+<h2>Split dataset into training and testing sets</h2>
+<pre class="r"><code>## split into train and test sets
+
+N = nrow(supervised)
+n = round(N *0.66, digits = 0)
+train = supervised[1:n, ]
+test  = supervised[(n+1):N,  ]</code></pre>
 </div>
-<div id="differencing" class="section level2">
-<h2>Differencing</h2>
-<p>For stationarity</p>
+<div id="normalize-the-data" class="section level2">
+<h2>Normalize the data</h2>
+<p>LSTM requires input data to be in scale of activation function, in this case [-1, 1]</p>
+<pre class="r"><code>## scale data
+normalize &lt;- function(x, feature_range = c(0, 1)) {
+  stdz = ((x - min(x)) / (max(x) - min(x)))
+  mins = feature_range[1]
+  maxs = feature_range[2]
+  minima = min(x)
+  maxima = max(x)
+  scaledz = stdz *(maxs -mins) + mins
+  
+  return( list(scores = as.vector(scaledz), scaler= c(min =minima, max = maxima)) )
+  
+}
+
+
+scaled_train =  normalize(train, c(-1, 1))
+scaled_test  = normalize(test, c(-1, 1))
+
+y_train = scaled_train$scores[, 2]
+x_train = scaled_train$scores[, 1]
+
+y_test = scaled_test$scores[, 2]
+x_test = scaled_test$scores[, 1]</code></pre>
 </div>
 <div id="define-the-model" class="section level2">
 <h2>Define the model</h2>
@@ -78,7 +126,7 @@ model%&gt;%
   optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  #  optimizer_sgd(lr = 0.02),
   metrics = c(&#39;accuracy&#39;)
 )</code></pre>
-<p>Let’s look at the model summary</p>
+<p>Model summary</p>
 <pre class="r"><code>summary(model)</code></pre>
 <pre><code>## ___________________________________________________________________________
 ## Layer (type)                     Output Shape                  Param #     
@@ -91,6 +139,5 @@ model%&gt;%
 ## Trainable params: 101
 ## Non-trainable params: 0
 ## ___________________________________________________________________________</code></pre>
-<p><span class="math display">\[ \bar{x} =  \sum_{i}^{n} x_i \]</span></p>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
