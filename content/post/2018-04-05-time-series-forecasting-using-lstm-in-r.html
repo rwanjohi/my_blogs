@@ -12,7 +12,7 @@ tags:
 output:
   blogdown::html_page:
     toc: true
-    fig_width: 6
+    #fig_width: 6
     dev: "svg"
 ---
 
@@ -31,7 +31,7 @@ output:
 <!--more-->
 <hr />
 <p>Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} $ where $ t  $ is the time indexing when the data was observed. The time $ t$ can be discrete in which case $  = $ or continuous with $  = $. For simplicity of the analysis we will consider only discrete time series.</p>
-<p>Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies.</p>
+<p>Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers.</p>
 <pre class="r"><code>library(keras)
 library(tensorflow)</code></pre>
 <div id="load-the-dataset" class="section level2">
@@ -42,8 +42,8 @@ names(df)
 head(df)
 summary(df)</code></pre>
 <p>Now lets see something here</p>
-<pre><code>## [1] 0.8481689</code></pre>
-<p>the estimated correlation is 0.8481689 and that is a good thing….</p>
+<pre><code>## [1] 0.9003872</code></pre>
+<p>the estimated correlation is 0.9003872 and that is a good thing….</p>
 <pre class="r"><code>lags &lt;- function(x, k){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
