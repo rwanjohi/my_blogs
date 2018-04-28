@@ -67,6 +67,7 @@ install_keras()</code></pre>
 </div>
 <div id="load-the-dataset" class="section level2">
 <h2>Load the dataset</h2>
+<p>We will use the US long-term interest rates data, available <a href="http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&amp;lang=en">here</a></p>
 <p>First five observations</p>
 <pre><code>## [1] 4.76 4.72 4.56 4.69 4.75 5.10</code></pre>
 </div>
@@ -200,21 +201,17 @@ for(i in 1:Epochs ){
 
 
 L = length(x_test)
-dim(x_test) = c(length(x_test), 1, 1)
-
 scaler = Scaled$scaler
 predictions = numeric(L)
+
 for(i in 1:L){
-     X = x_test[i , , ]
+     X = x_test[i]
      dim(X) = c(1,1,1)
      yhat = model %&gt;% predict(X, batch_size=batch_size)
-     
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
-     
      # invert differencing
-     yhat  = yhat + Series[(n+i)]
-     
+     yhat  = yhat + Series[(n+i
      # store
      predictions[i] &lt;- yhat
 }</code></pre>

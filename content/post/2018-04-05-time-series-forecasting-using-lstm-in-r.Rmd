@@ -52,6 +52,10 @@ Three main gates:
 3. 
 
 
+
+
+
+
 ```{r, warning=FALSE, message=FALSE}
 # Load the necessary packages
 library(keras)
@@ -68,6 +72,7 @@ install_keras()
 
 
 ## Load the dataset
+We will use the US long-term interest rates data, available [here](http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&lang=en)
 ```{r, results= 'hide', include= FALSE}
 
 df = read.table('C:/Users/Richard/Desktop/LTIR_US.csv', sep = ',', header = TRUE, na.strings = 'NULL')
@@ -228,21 +233,17 @@ for(i in 1:Epochs ){
 
 
 L = length(x_test)
-dim(x_test) = c(length(x_test), 1, 1)
-
 scaler = Scaled$scaler
 predictions = numeric(L)
+
 for(i in 1:L){
-     X = x_test[i , , ]
+     X = x_test[i]
      dim(X) = c(1,1,1)
      yhat = model %>% predict(X, batch_size=batch_size)
-     
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
-     
      # invert differencing
-     yhat  = yhat + Series[(n+i)]
-     
+     yhat  = yhat + Series[(n+i
      # store
      predictions[i] <- yhat
 }
