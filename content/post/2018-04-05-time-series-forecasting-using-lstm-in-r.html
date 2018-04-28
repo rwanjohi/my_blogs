@@ -35,11 +35,27 @@ output:
 <hr />
 <div id="brief-introduction" class="section level2">
 <h2>Brief Introduction</h2>
-<p>Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} $ where $ t  $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $  = $ or continuous with $  = $. $$, For simplicity of the analysis we will consider only discrete time series.</p>
+<p>Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} $ where $ t  $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $  =  $ or continuous with $  = $.</p>
+<p>For simplicity of the analysis we will consider only discrete time series.</p>
 <p>Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and its manipulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
-<p>Three main gates: * Forget gate: + This determine what information will be deleted from the cell state.</p>
-<p><span class="math display">\[ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) \]</span> * Input gate: + this</p>
-<pre><code>$$ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) $$</code></pre>
+<p>Cell states Ct, the lstm have ability to, conditionally, add or delete info from the cell state, a process is regulated by structures known as gates.</p>
+<p>The gates consist of sigmoid function/layer and outputs number between 0 and 1 with 0 meaning ‘None’ and 1 means ‘All’</p>
+<p>Three main gates:</p>
+<ol style="list-style-type: decimal">
+<li>Forget gate:
+<ul>
+<li>This determine what information will be deleted from the cell state.</li>
+</ul></li>
+</ol>
+<p><span class="math display">\[ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) \]</span></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Input gate:
+<ul>
+<li>this</li>
+</ul>
+<p><span class="math display">\[ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) \]</span></p></li>
+<li></li>
+</ol>
 <pre class="r"><code># Load the necessary packages
 library(keras)
 library(tensorflow)</code></pre>
@@ -52,13 +68,7 @@ install_keras()</code></pre>
 <div id="load-the-dataset" class="section level2">
 <h2>Load the dataset</h2>
 <p>First five observations</p>
-<pre><code>##   ï..LOCATION INDICATOR SUBJECT MEASURE FREQUENCY    TIME Value Flag.Codes
-## 1         USA     LTINT     TOT   PC_PA         M 2007-01  4.76         NA
-## 2         USA     LTINT     TOT   PC_PA         M 2007-02  4.72         NA
-## 3         USA     LTINT     TOT   PC_PA         M 2007-03  4.56         NA
-## 4         USA     LTINT     TOT   PC_PA         M 2007-04  4.69         NA
-## 5         USA     LTINT     TOT   PC_PA         M 2007-05  4.75         NA
-## 6         USA     LTINT     TOT   PC_PA         M 2007-06  5.10         NA</code></pre>
+<pre><code>## [1] 4.76 4.72 4.56 4.69 4.75 5.10</code></pre>
 </div>
 <div id="differencing" class="section level2">
 <h2>Differencing</h2>
@@ -182,8 +192,8 @@ model%&gt;%
 ## ___________________________________________________________________________</code></pre>
 <div id="fit-the-model" class="section level4">
 <h4>Fit the model</h4>
-<pre class="r"><code>nb_epoch = 50    # 50 is good
-for(i in 1:nb_epoch ){
+<pre class="r"><code>Epochs = 50   
+for(i in 1:Epochs ){
   model %&gt;% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
   model %&gt;% reset_states()
 }

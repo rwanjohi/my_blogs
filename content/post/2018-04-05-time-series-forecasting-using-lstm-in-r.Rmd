@@ -24,20 +24,33 @@ the page `is good` but the `output` not soo good
 ***
 ## Brief Introduction
 
-Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} \in \mathbb{R}$  where $ t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $ \mathcal{T} = \mathbb{Z}$ or continuous  with $ \mathcal{T} = \mathbb{R}$. $\alpha $,  For simplicity of the analysis we will consider only discrete time series.
+Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} \in \mathbb{R}$  where 
+$ t \in \mathcal{T} $ 
+is the time indexing when the data was observed. The time  $ t $  can be discrete in which case $ \mathcal{T} = \mathbb{Z} $ or continuous  with $ \mathcal{T} = \mathbb{R}$. 
+
+For simplicity of the analysis we will consider only discrete time series.
 
 Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers.
 The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and its manipulated by mechanisms, known as gates, through *sigmoid* and *tanh* activation functions.
 
+Cell states Ct, the lstm have ability to, conditionally, add or delete info from the cell state, a  process is regulated by structures known as gates.
+
+The gates consist of sigmoid function/layer and outputs number between 0 and 1 with 0 meaning 'None' and 1 means 'All'
+
+ 
 Three main gates:
-* Forget gate:
-     + This determine what information will be deleted from the cell state. 
+
+1. Forget gate:
+      + This determine what information will be deleted from the cell state. 
   
   $$ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) $$
-* Input gate:
-    + this 
-    
+  
+2. Input gate:
+       + this 
+       
     $$ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) $$
+
+3. 
 
 
 ```{r, warning=FALSE, message=FALSE}
@@ -67,7 +80,7 @@ L = length(Series)
 
 First five observations
 ```{r, echo= FALSE}
-head(df)
+head(Series)
 ```
 
 
@@ -207,9 +220,9 @@ summary(model)
 
 #### Fit the model
 
-```{r, results= 'hide'}
-nb_epoch = 50    # 50 is good
-for(i in 1:nb_epoch ){
+```{r, results= 'hide', eval= FALSE}
+Epochs = 50   
+for(i in 1:Epochs ){
   model %>% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
   model %>% reset_states()
 }
