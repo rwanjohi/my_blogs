@@ -24,7 +24,7 @@ the page `is good` but the `output` not soo good
 ***
 ## Brief Introduction
 
-Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} \in \mathbb{R}$  where 
+Time series involves data collected sequentially in time. I denote univariate data by $ y_{t} \in \mathbb{R} $$  where 
 $ t \in \mathcal{T} $ 
 is the time indexing when the data was observed. The time  $ t $  can be discrete in which case $ \mathcal{T} = \mathbb{Z} $ or continuous  with $ \mathcal{T} = \mathbb{R}$. 
 
