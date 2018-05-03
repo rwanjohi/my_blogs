@@ -35,7 +35,7 @@ output:
 <hr />
 <div id="brief-introduction" class="section level2">
 <h2>Brief Introduction</h2>
-<p>Time series involves data collected sequentially in time. I denote univariate data by $y_{t}  $ where $t  $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $ =  $ or continuous with $ =  $.</p>
+<p>Time series involves data collected sequentially in time. I denote univariate data by $y_{t}  $ where $t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $ =  $ or continuous with $ =  $.</p>
 <p>For simplicity of the analysis we will consider only discrete time series.</p>
 <p>Long Short Term Memory networks are special kind of RNN (Recurrent Neural Network), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and its manipulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
 <p>Cell states Ct, the lstm have ability to, conditionally, add or delete info from the cell state, a process is regulated by structures known as gates.</p>
