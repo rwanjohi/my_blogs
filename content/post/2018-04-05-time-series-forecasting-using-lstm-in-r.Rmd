@@ -29,12 +29,10 @@ $t \\in \\mathcal{T} $  is the time indexing when the data was observed. The tim
 For simplicity of the analysis we will consider only discrete time series.
 
 Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers.
-The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is manipulated by mechanisms, known as gates, through *sigmoid* and *tanh* activation functions.
+The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through *sigmoid* and *tanh* activation functions.
 
-The sigmoid function/layer outputs number between 0 and 1 with 0 meaning 'None' and 1 means 'All'
+The sigmoid function/layer outputs numbers between 0 and 1 with 0 meaning 'None goes through' and 1 means 'All pass' and therefore LSTM have the ability to, conditionally, add or delete information from the cell state.
 
-Cell states Ct, the lstm have ability to, conditionally, add or delete info from the cell state, a  process is regulated by structures known as gates.
- 
 Three main gates:
 
 1. Forget gate:

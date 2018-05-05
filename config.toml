@@ -17,8 +17,7 @@ theme = "hugo-icarus-theme"
 [permalinks]
     post = "/:year/:month/:day/:slug"
 
-[params]
-themeVariant = "lightgray"
+
 
 [params]
     # Tell me who you are
