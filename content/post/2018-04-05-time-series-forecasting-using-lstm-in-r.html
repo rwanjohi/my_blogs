@@ -20,7 +20,7 @@ output:
 <div id="TOC">
 <ul>
 <li><a href="#brief-introduction">Brief Introduction</a></li>
-<li><a href="#load-the-dataset">Load the dataset</a></li>
+<li><a href="#load-the-neccessary-libraries-the-dataset">Load the neccessary libraries &amp; the dataset</a></li>
 <li><a href="#differencing">Differencing</a></li>
 <li><a href="#lagged-dataset">Lagged dataset</a></li>
 <li><a href="#split-dataset-into-training-and-testing-sets">Split dataset into training and testing sets</a></li>
@@ -42,7 +42,7 @@ output:
 <ol style="list-style-type: decimal">
 <li>Forget gate:
 <ul>
-<li>This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. The output is a number between 0 and 1 with 0</li>
+<li>This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. The output is a number between 0 and 1 with 0 meaning ‘delete all’ and 1 implying ‘remember all’</li>
 </ul></li>
 </ol>
 <p><span class="math display">\[ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) \]</span></p>
@@ -63,6 +63,9 @@ output:
 </ul>
 <p><span class="math display">\[ h_{t} = O_{t} * tanh(C_{t}) \]</span></p></li>
 </ol>
+</div>
+<div id="load-the-neccessary-libraries-the-dataset" class="section level2">
+<h2>Load the neccessary libraries &amp; the dataset</h2>
 <pre class="r"><code># Load the necessary packages
 library(keras)
 library(tensorflow)</code></pre>
@@ -71,10 +74,8 @@ library(tensorflow)</code></pre>
 # then install Tensorflow backend as follows:
 library(keras)
 install_keras()</code></pre>
-</div>
-<div id="load-the-dataset" class="section level2">
-<h2>Load the dataset</h2>
-<p>We will use the US long-term interest rates data, available <a href="http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&amp;lang=en">here</a></p>
+<p>We will use the US long-term interest rates data, available <a href="http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&amp;lang=en">here</a> The data consist of</p>
+<p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>First five observations</p>
 <pre><code>## [1] 4.76 4.72 4.56 4.69 4.75 5.10</code></pre>
 </div>

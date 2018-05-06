@@ -36,17 +36,18 @@ The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating 'No
 Three main gates:
 
 1. Forget gate:
-      + This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. The output is a number between 0 and 1 with 0 meaning 'delete all' and 1 implying 'remember all'
+      + This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. 
+      + The output is a number between 0 and 1 with 0 meaning 'delete all' and 1 implying 'remember all'
   
   $$ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) $$
   
 2. Input gate:
-       + In this step, the tahn activation layer create a vector of potential canditate as follows:
+       + In this step, the *tahn* activation layer create a vector of potential canditate as follows:
        
        $$ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  $$
-      then the sigmoid layer creates an update filter as follows:
+      + The sigmoid layer creates an update filter as follows:
       $$ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) $$
-     Next, the old cell state $ C_{t-1} $ is updated as follows:
+      + Next, the old cell state $ C_{t-1} $ is updated as follows:
      $$ C_{t} = f_{t} * C_{t-1} + U_{t} * \hat{C_{t}} $$
 
 
