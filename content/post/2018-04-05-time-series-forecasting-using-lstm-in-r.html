@@ -37,7 +37,7 @@ output:
 <h2>Brief Introduction</h2>
 <p>Time series involves data collected sequentially in time. I denote univariate data by $x_{t} \in \mathbb{R} $ where $t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $\mathcal{T} = \mathbb{Z} $ or continuous with $\mathcal{T} = \mathbb{R} $. For simplicity of the analysis we will consider only discrete time series.</p>
 <p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
-<p>The sigmoid function/layer outputs number between 0 and 1 with 0 meaning ‘None goes through’ and 1 means ‘All pass’ and therefore LSTM have the ability to, conditionally, add or delete information from the cell state.</p>
+<p>The sigmoid function/layer outputs numbers between 0 and 1 with 0 meaning ‘None goes through’ and 1 means ‘All pass’ and therefore LSTM have the ability to, conditionally, add or delete information from the cell state.</p>
 <p>Three main gates:</p>
 <ol style="list-style-type: decimal">
 <li>Forget gate:
@@ -49,10 +49,13 @@ output:
 <ol start="2" style="list-style-type: decimal">
 <li>Input gate:
 <ul>
-<li>this</li>
+<li>In this step, the tahn activation layer create a vector of potential canditate as follows:</li>
 </ul>
-<p><span class="math display">\[ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) \]</span></p></li>
-<li></li>
+<p><span class="math display">\[ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  \]</span> then the sigmoid layer creates an update as follows: <span class="math display">\[ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) \]</span></p></li>
+<li>Output gate:
+<ul>
+<li>here</li>
+</ul></li>
 </ol>
 <pre class="r"><code># Load the necessary packages
 library(keras)

@@ -41,11 +41,18 @@ Three main gates:
   $$ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) $$
   
 2. Input gate:
-       + this 
+       + In this step, the tahn activation layer create a vector of potential canditate as follows:
        
-    $$ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) $$
+       $$ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  $$
+      then the sigmoid layer creates an update as follows:
+      $$ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) $$
 
-3. 
+
+
+3. Output gate:
+       +  here 
+       
+  
 
 
 
