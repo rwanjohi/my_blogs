@@ -54,8 +54,14 @@ output:
 <p><span class="math display">\[ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  \]</span> then the sigmoid layer creates an update filter as follows: <span class="math display">\[ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) \]</span> Next, the old cell state $ C_{t-1} $ is updated as follows: <span class="math display">\[ C_{t} = f_{t} * C_{t-1} + U_{t} * \hat{C_{t}} \]</span></p></li>
 <li>Output gate:
 <ul>
-<li>This regulates what info will be The sigmoid layer filters the cell state that is going to output. The cell state $ C_{t} $ is passed thro tanh function to scale values to -1, 1</li>
-</ul></li>
+<li>In this step, the sigmoid layer filters the cell state that is going to output.</li>
+</ul>
+<p><span class="math display">\[ O_{t} = \sigma \big(W_{o}[h_{t-1}, x_{t}] + b_{o}) \]</span></p>
+<ul>
+<li>Then, the cell state $ C_{t} $ is passed thro tanh function to scale values to the range -1 to 1.</li>
+<li>Finally, the scaled cell state is multiplied by the filtered output to obtain the hidden state $ h_{t} $ to be passed on to the next cell:</li>
+</ul>
+<p><span class="math display">\[ h_{t} = O_{t} * tanh(C_{t}) \]</span></p></li>
 </ol>
 <pre class="r"><code># Load the necessary packages
 library(keras)
