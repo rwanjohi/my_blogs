@@ -37,12 +37,12 @@ output:
 <h2>Brief Introduction</h2>
 <p>Time series involves data collected sequentially in time. I denote univariate data by $x_{t} \in \mathbb{R} $ where $t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $\mathcal{T} = \mathbb{Z} $ or continuous with $\mathcal{T} = \mathbb{R} $. For simplicity of the analysis we will consider only discrete time series.</p>
 <p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
-<p>The sigmoid function/layer outputs numbers between 0 and 1 with 0 meaning ‘None goes through’ and 1 means ‘All pass’ and therefore LSTM have the ability to, conditionally, add or delete information from the cell state.</p>
+<p>The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating ‘Nothing goes through’ and 1 implying ‘Everything goes through’. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.</p>
 <p>Three main gates:</p>
 <ol style="list-style-type: decimal">
 <li>Forget gate:
 <ul>
-<li>This determine what information will be deleted from the cell state.</li>
+<li>This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. The output is a number between 0 and 1 with 0</li>
 </ul></li>
 </ol>
 <p><span class="math display">\[ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) \]</span></p>
@@ -51,10 +51,10 @@ output:
 <ul>
 <li>In this step, the tahn activation layer create a vector of potential canditate as follows:</li>
 </ul>
-<p><span class="math display">\[ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  \]</span> then the sigmoid layer creates an update as follows: <span class="math display">\[ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) \]</span></p></li>
+<p><span class="math display">\[ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  \]</span> then the sigmoid layer creates an update filter as follows: <span class="math display">\[ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) \]</span> Next, the old cell state $ C_{t-1} $ is updated as follows: <span class="math display">\[ C_{t} = f_{t} * C_{t-1} + U_{t} * \hat{C_{t}} \]</span></p></li>
 <li>Output gate:
 <ul>
-<li>here</li>
+<li>This regulates what info will be The sigmoid layer filters the cell state that is going to output. The cell state $ C_{t} $ is passed thro tanh function to scale values to -1, 1</li>
 </ul></li>
 </ol>
 <pre class="r"><code># Load the necessary packages
