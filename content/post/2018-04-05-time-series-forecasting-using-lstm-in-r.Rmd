@@ -36,7 +36,7 @@ The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating 'No
 Three main gates:
 
 1. Forget gate:
-      + This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. The output is a number between 0 and 1 with 0 
+      + This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. The output is a number between 0 and 1 with 0 meaning 'delete all' and 1 implying 'remember all'
   
   $$ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) $$
   
@@ -69,6 +69,10 @@ Three main gates:
 
 
 
+
+## Load the neccessary libraries & the dataset
+
+
 ```{r, warning=FALSE, message=FALSE}
 # Load the necessary packages
 library(keras)
@@ -84,8 +88,9 @@ install_keras()
 ```
 
 
-## Load the dataset
+
 We will use the US long-term interest rates data, available [here](http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&lang=en)
+The data consist of 
 ```{r, results= 'hide', include= FALSE}
 
 df = read.table('C:/Users/Richard/Desktop/LTIR_US.csv', sep = ',', header = TRUE, na.strings = 'NULL')
@@ -94,6 +99,14 @@ Series = df$Value
 L = length(Series)
 
 ```
+
+
+```{r, echo= FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+ggplot()
+
+```
+
 
 First five observations
 ```{r, echo= FALSE}
