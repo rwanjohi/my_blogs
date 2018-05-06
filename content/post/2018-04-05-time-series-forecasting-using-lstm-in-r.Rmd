@@ -51,9 +51,15 @@ Three main gates:
 
 
 3. Output gate:
-       +  This regulates what info will be 
-       The sigmoid layer filters the cell state that is going to output. 
-       The cell state $ C_{t} $ is passed thro tanh function to scale values to -1, 1
+       +  In this step, the sigmoid layer filters the cell state that is going to output. 
+      
+       $$ O_{t} = \sigma \big(W_{o}[h_{t-1}, x_{t}] + b_{o}) $$
+       
+       +  Then, the cell state $ C_{t} $ is passed thro tanh function to scale values to the range -1 to 1.
+       +   Finally, the scaled cell state is multiplied by the filtered output to obtain the hidden state $ h_{t} $ to be passed on to the next cell:
+       
+       $$ h_{t} = O_{t} * tanh(C_{t}) $$ 
+       
        
        
   
