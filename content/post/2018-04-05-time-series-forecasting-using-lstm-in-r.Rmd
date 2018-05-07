@@ -16,7 +16,7 @@ output:
     #dev: "svg"
 ---
 
-Mid 2017 R launched Keras in R, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
+Mid 2017 R launched package *Keras*, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
 
 <!--more-->
 
@@ -101,8 +101,11 @@ df$TIME = as.character(df$TIME)
 df$TIME =  as.Date(paste(df$TIME,"-01",sep=""))
 
 
-ggplot(df, aes(TIME, Value, group = 1)) + geom_line()+
-  scale_x_date(date_breaks = '2 years') + xlab("Time") + ylab("Value")
+ggplot(df, aes(TIME, Value, group = 1)) + geom_line(color = 'blue')+
+  scale_x_date(date_breaks = '2 years') + xlab("Time") + ylab("Value")+
+   ggtitle("US Long-term Interest Rates") +
+   theme(plot.title = element_text(hjust = 0.5))
+
 
 ```
 
@@ -115,7 +118,7 @@ head(Series)
 
 ## Differencing 
 
-For stationarity 
+We transform the data to stationarity by differencing. By doing this we are dealing with difference between different time steps rather than the raw data themselves. 
 ```{r}
 # transform data to stationarity
 diffed = diff(Series, differences = 1)
