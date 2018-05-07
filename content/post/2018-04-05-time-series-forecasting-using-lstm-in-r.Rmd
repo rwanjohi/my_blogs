@@ -63,13 +63,6 @@ Three main gates:
        
        
        
-  
-
-
-
-
-
-
 
 ## Load the neccessary libraries & the dataset
 
@@ -99,12 +92,18 @@ df = read.table('C:/Users/Richard/Desktop/LTIR_US.csv', sep = ',', header = TRUE
 Series = df$Value
 L = length(Series)
 
+
 ```
 
 
 ```{r, echo= FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
-ggplot()
+df$TIME = as.character(df$TIME)
+df$TIME =  as.Date(paste(df$TIME,"-01",sep=""))
+
+
+ggplot(df, aes(TIME, Value, group = 1)) + geom_line()+
+  scale_x_date(date_breaks = '2 years') + xlab("Time") + ylab("Value")
 
 ```
 
