@@ -16,8 +16,7 @@ output:
     #dev: "svg"
 ---
 
-Under construction!!! 
-the page `is good` but the `output` not soo good 
+Mid 2017 R launched Keras in R, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
 
 <!--more-->
 
