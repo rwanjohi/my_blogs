@@ -262,7 +262,7 @@ summary(model)
 
 #### Fit the model
 
-```{r, results= 'hide', eval= FALSE}
+```{r, results= 'hide'}
 Epochs = 50   
 for(i in 1:Epochs ){
   model %>% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
@@ -281,7 +281,7 @@ for(i in 1:L){
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
      # invert differencing
-     yhat  = yhat + Series[(n+i
+     yhat  = yhat + Series[(n+i)]
      # store
      predictions[i] <- yhat
 }
@@ -291,7 +291,8 @@ for(i in 1:L){
 
 Plot the values
 
-```{r, results= 'hide'}
+
+```{r, results= 'hide', eval= FALSE}
 
 M = length(Series)
 
@@ -316,6 +317,8 @@ lines(predictions, col = 4)
 
 
 ```
+
+
 
 Get the entire code in [my git repo](https://github.com/rwanjohi/Keras-in-R)
 
