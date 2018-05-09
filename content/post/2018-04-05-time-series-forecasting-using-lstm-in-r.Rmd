@@ -34,7 +34,7 @@ The information in the cells is cointained in cell state $ C_{t} $ and hidden st
 
 The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating 'Nothing goes through' and 1 implying 'Everything goes through'. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.
 
-The gates takes in, as input, the hidden states from previous time step $ h_{t_1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and bias $ b $ is added to the product.
+The gates takes in, as input, the hidden states from previous time step $ h_{t-1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and bias $ b $ is added to the product.
 
 Three main gates:
 
@@ -292,7 +292,7 @@ for(i in 1:L){
 Plot the values
 
 
-```{r, results= 'hide', eval= FALSE}
+```{r, echo= FALSE, warning=FALSE, message=FALSE }
 
 M = length(Series)
 
