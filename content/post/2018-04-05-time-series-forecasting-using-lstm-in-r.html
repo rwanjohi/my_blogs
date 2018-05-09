@@ -39,7 +39,7 @@ output:
 <p>Time series involves data collected sequentially in time. I denote univariate data by $x_{t} \in \mathbb{R} $ where $t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $\mathcal{T} = \mathbb{Z} $ or continuous with $\mathcal{T} = \mathbb{R} $. For simplicity of the analysis we will consider only discrete time series.</p>
 <p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
 <p>The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating ‘Nothing goes through’ and 1 implying ‘Everything goes through’. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.</p>
-<p>The gates takes in, as input, the hidden states from previous time step $ h_{t_1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and bias $ b $ is added to the product.</p>
+<p>The gates takes in, as input, the hidden states from previous time step $ h_{t-1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and bias $ b $ is added to the product.</p>
 <p>Three main gates:</p>
 <ol style="list-style-type: decimal">
 <li>Forget gate:
@@ -234,26 +234,8 @@ for(i in 1:L){
      predictions[i] &lt;- yhat
 }</code></pre>
 <p>Plot the values</p>
-<pre class="r"><code>M = length(Series)
-
-(rmse = round(sqrt(mean(Series[(n+2): M]- predictions)^2), 3 ))
-
-YY = Series[(n+2):M]
-Y = Series[1:(n+1)]
-plot(Y, type = &#39;l&#39;, ylim = c(0, max(Series)), xlim = c(0, 50), ylab = &#39;Values&#39;, pch = 16, col = 4, lwd = 2)
-myNA = rep(NA, length(Y))
-ytests  = c(myNA, YY)
-ypreds   = c(myNA, predictions)
-
-lines( ytests,col=2,lwd=2) 
-lines(ypreds, col = 3, lwd = 2)
-#lines(predictions, col = 2, type = &#39;l&#39;, pch = 16, lwd = 2, lty = 2)
-legend(&#39;topright&#39;, legend = c(&#39;test&#39;, &#39;prediction&#39;), col = c(4, 2), lwd= 2, cex = 0.7)
-lines(Series, type = &#39;l&#39;)
-
-
-plot(Series[(n+2):M], type = &#39;l&#39;)
-lines(predictions, col = 4)</code></pre>
+<pre><code>## [1] 0.035</code></pre>
+<p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
 </div>
