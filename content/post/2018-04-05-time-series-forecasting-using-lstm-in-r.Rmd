@@ -300,7 +300,7 @@ M = length(Series)
 
 YY = Series[(n+2):M]
 Y = Series[1:(n+1)]
-plot(Y, type = 'l', ylim = c(0, max(Series)), xlim = c(0, 50), ylab = 'Values', pch = 16, col = 4, lwd = 2)
+plot(Y, type = 'l', ylim = c(0, max(Series)), xlim = c(0, M), ylab = 'Values', pch = 16, col = 4, lwd = 2)
 myNA = rep(NA, length(Y))
 ytests  = c(myNA, YY)
 ypreds   = c(myNA, predictions)
@@ -312,8 +312,8 @@ legend('topright', legend = c('test', 'prediction'), col = c(4, 2), lwd= 2, cex 
 lines(Series, type = 'l')
 
 
-plot(Series[(n+2):M], type = 'l')
-lines(predictions, col = 4)
+#plot(Series[(n+2):M], type = 'l')
+#lines(predictions, col = 4)
 
 
 ```
