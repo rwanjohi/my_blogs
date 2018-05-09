@@ -15,6 +15,8 @@ output:
     #fig_width: 6
     #dev: "svg"
 ---
+`still under construction ` 
+
 
 Mid 2017 R launched package *Keras*, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
 
@@ -32,10 +34,12 @@ The information in the cells is cointained in cell state $ C_{t} $ and hidden st
 
 The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating 'Nothing goes through' and 1 implying 'Everything goes through'. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.
 
+The gates takes in, as input, the hidden states from previous time step $ h_{t_1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and bias $ b $ is added to the product.
+
 Three main gates:
 
 1. Forget gate:
-      + This determine what information will be deleted from the cell state. It takes into account the hidden state from previous time step $ h_{t-1} $ and current input $ x_{t} $. 
+      + This determine what information will be deleted from the cell state. 
       + The output is a number between 0 and 1 with 0 meaning 'delete all' and 1 implying 'remember all'
   
   $$ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) $$
@@ -44,8 +48,12 @@ Three main gates:
        + In this step, the *tahn* activation layer create a vector of potential canditate as follows:
        
        $$ \hat{C_{t}} = \tanh \big(W_{c}[h_{t-1}, x_{t}] + b_{c})  $$
+       
       + The sigmoid layer creates an update filter as follows:
+      
       $$ U_{t} = \sigma \big(W_{u}[h_{t-1}, x_{t}] + b_{u} \big) $$
+      
+      
       + Next, the old cell state $ C_{t-1} $ is updated as follows:
      $$ C_{t} = f_{t} * C_{t-1} + U_{t} * \hat{C_{t}} $$
 
@@ -83,7 +91,8 @@ install_keras()
 
 
 We will use the US long-term interest rates data, available [here](http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&lang=en)
-The data consist of 
+This is a monthly data from Jan 2007 to March 2018.
+
 ```{r, results= 'hide', include= FALSE}
 
 df = read.table('C:/Users/Richard/Desktop/LTIR_US.csv', sep = ',', header = TRUE, na.strings = 'NULL')
@@ -116,9 +125,10 @@ head(Series)
 ```
 
 
-## Differencing 
+## Transform data to stationary
 
-We transform the data to stationarity by differencing. By doing this we are dealing with difference between different time steps rather than the raw data themselves. 
+This is done by getting the difference between two consecutive values in the series. This transformation, commonly known as differencing, removes components in the data that are time dependent. Furthermore, it is easier to model using the difference, rather than the raw values, and the resulting model has a higher predictive power. 
+
 ```{r}
 # transform data to stationarity
 diffed = diff(Series, differences = 1)
@@ -129,7 +139,7 @@ head(diffed)
 
 ## Lagged dataset
 
-Transform the series into supervised learning
+LSTM expects the data to be in a supervised learning mode. That is having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.  
 
 
 ```{r}
@@ -275,6 +285,34 @@ for(i in 1:L){
      # store
      predictions[i] <- yhat
 }
+
+
+```
+
+Plot the values
+
+```{r, results= 'hide'}
+
+M = length(Series)
+
+(rmse = round(sqrt(mean(Series[(n+2): M]- predictions)^2), 3 ))
+
+YY = Series[(n+2):M]
+Y = Series[1:(n+1)]
+plot(Y, type = 'l', ylim = c(0, max(Series)), xlim = c(0, 50), ylab = 'Values', pch = 16, col = 4, lwd = 2)
+myNA = rep(NA, length(Y))
+ytests  = c(myNA, YY)
+ypreds   = c(myNA, predictions)
+
+lines( ytests,col=2,lwd=2) 
+lines(ypreds, col = 3, lwd = 2)
+#lines(predictions, col = 2, type = 'l', pch = 16, lwd = 2, lty = 2)
+legend('topright', legend = c('test', 'prediction'), col = c(4, 2), lwd= 2, cex = 0.7)
+lines(Series, type = 'l')
+
+
+plot(Series[(n+2):M], type = 'l')
+lines(predictions, col = 4)
 
 
 ```
