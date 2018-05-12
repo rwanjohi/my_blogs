@@ -68,7 +68,7 @@ output:
 </ul>
 <p><span class="math display">\[ O_{t} = \sigma \big(W_{o}[h_{t-1}, x_{t}] + b_{o}) \]</span></p>
 <ul>
-<li>Then, the cell state $ C_{t} $ is passed thro tanh function to scale values to the range -1 to 1.</li>
+<li>The cell state $ C_{t} $ is then passed through tanh function to scale values to the range [-1, 1].</li>
 <li>Finally, the scaled cell state is multiplied by the filtered output to obtain the hidden state $ h_{t} $ to be passed on to the next cell:</li>
 </ul>
 <p><span class="math display">\[ h_{t} = O_{t} * tanh(C_{t}) \]</span></p></li>
@@ -174,6 +174,7 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 </div>
 <div id="define-the-model" class="section level2">
 <h2>Define the model</h2>
+<p>We set the argument <em>stateful</em>= TRUE, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</p>
 <pre class="r"><code># Reshape the input
 dim(x_train) &lt;- c(length(x_train), 1, 1)
 
@@ -213,6 +214,7 @@ model%&gt;%
 ## ___________________________________________________________________________</code></pre>
 <div id="fit-the-model" class="section level4">
 <h4>Fit the model</h4>
+<p>We set the argument <em>shuffle</em> = FALSE to avoid shuffling the training set and maintain the dependencies between $ x_{i} $ and $ x_{i+t} $. LSTM also requires resetting of the network state after each epoch. To achive this we run a loop over epochs where within each epoch we fit the model and reset the states via the argument <em>reset_states()</em>.</p>
 <pre class="r"><code>Epochs = 50   
 for(i in 1:Epochs ){
   model %&gt;% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
@@ -237,7 +239,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0.047</code></pre>
+<pre><code>## RMSE:  0.039</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
 </div>

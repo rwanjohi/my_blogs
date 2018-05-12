@@ -63,7 +63,7 @@ Three main gates:
       
        $$ O_{t} = \sigma \big(W_{o}[h_{t-1}, x_{t}] + b_{o}) $$
        
-       +  Then, the cell state $ C_{t} $ is passed thro tanh function to scale values to the range -1 to 1.
+       +  The cell state $ C_{t} $ is then passed through tanh function to scale values to the range [-1, 1].
        +   Finally, the scaled cell state is multiplied by the filtered output to obtain the hidden state $ h_{t} $ to be passed on to the next cell:
        
        $$ h_{t} = O_{t} * tanh(C_{t}) $$ 
@@ -227,6 +227,11 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 
 
 ## Define the model
+
+We set the argument *stateful*= TRUE, 
+the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.
+
+
 ```{r, results= 'hide'}
 # Reshape the input
 dim(x_train) <- c(length(x_train), 1, 1)
@@ -266,6 +271,7 @@ summary(model)
 ```
 
 #### Fit the model
+We set the argument *shuffle* = FALSE to avoid shuffling the training set and maintain the dependencies between $ x_{i} $ and $ x_{i+t} $.  LSTM also requires resetting of the network state after each epoch. To achive this we run a loop over epochs where within each epoch we fit the model and reset the states via the argument *reset_states()*.
 
 ```{r, results= 'hide'}
 Epochs = 50   
