@@ -99,7 +99,7 @@ head(diffed)</code></pre>
 </div>
 <div id="lagged-dataset" class="section level2">
 <h2>Lagged dataset</h2>
-<p>LSTM expects the data to be in a supervised learning mode. That is having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.</p>
+<p>LSTM expects the data to be in a supervised learning mode. That is, having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.</p>
 <pre class="r"><code>supervised_transform &lt;- function(x, k= 1){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
@@ -120,6 +120,7 @@ head(supervised)</code></pre>
 </div>
 <div id="split-dataset-into-training-and-testing-sets" class="section level2">
 <h2>Split dataset into training and testing sets</h2>
+<p>Unlike in most analysis where a random sample is picked, with time series data the order of the observations do matters. The following code split the first 70% of the series as training set and the remaining 30% as test set.</p>
 <pre class="r"><code>## split into train and test sets
 
 N = nrow(supervised)
@@ -129,7 +130,7 @@ test  = supervised[(n+1):N,  ]</code></pre>
 </div>
 <div id="normalize-the-data" class="section level2">
 <h2>Normalize the data</h2>
-<p>LSTM, like other neural network models, requires input data to be within the scale of activation function. The default function is sigmoid whose range is [-1, 1]</p>
+<p>Just like in any other neural network models, we rescale the input data X to the range of the activation function. As shown earlier the default activation function is sigmoid whose range is [-1, 1]. The code below will help transform our data to the range [-1, 1]</p>
 <pre class="r"><code>## scale data
 scale_data &lt;- function(train, test, feature_range = c(0, 1)) {
   x = train
@@ -153,7 +154,7 @@ x_train = Scaled$scaled_train[, 1]
 
 y_test = Scaled$scaled_test[, 2]
 x_test = Scaled$scaled_test[, 1]</code></pre>
-<p>The following code will be required to revert the data to their original scale</p>
+<p>The following code will be required to invert the predicted values to the original scale.</p>
 <pre class="r"><code>## inverse-transform
 invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
   min = scaler[1]
@@ -191,6 +192,7 @@ model%&gt;%
 </div>
 <div id="compile-the-model" class="section level2">
 <h2>Compile the model</h2>
+<p>Here I have specified the <em>mean_squared_error</em> as the loss function, Adaptive Monument Estimation (ADAM) as the optimization algorithm and learning rate and learning rate decay over each update. Finaly, I have used the <em>accuracy</em> as the metric to assess the model performance.</p>
 <pre class="r"><code>model %&gt;% compile(
   loss = &#39;mean_squared_error&#39;,
   optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  
@@ -234,7 +236,7 @@ for(i in 1:L){
      predictions[i] &lt;- yhat
 }</code></pre>
 <p>Plot the values</p>
-<pre><code>## [1] 0.044</code></pre>
+<pre><code>## [1] 0.035</code></pre>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>

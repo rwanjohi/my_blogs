@@ -139,7 +139,7 @@ head(diffed)
 
 ## Lagged dataset
 
-LSTM expects the data to be in a supervised learning mode. That is having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.  
+LSTM expects the data to be in a supervised learning mode. That is,  having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.  
 
 
 ```{r}
@@ -158,6 +158,8 @@ head(supervised)
 
 ## Split dataset into training and testing sets
 
+Unlike in most analysis where a random sample is picked, with time series data the order of the observations do matters. The following code split the first 70% of the series as training set and the remaining 30% as test set. 
+
 ```{r}
 ## split into train and test sets
 
@@ -170,7 +172,7 @@ test  = supervised[(n+1):N,  ]
 
 
 ## Normalize the data
-LSTM, like other neural network models, requires input data to be within the scale of activation function. The default function is sigmoid whose range is [-1, 1]
+Just like in any other neural network models, we rescale the input data X to the range of the activation function. As shown earlier the default activation function is sigmoid whose range is [-1, 1]. The code below will help transform our data to the range [-1, 1]
 
 
 ```{r}
@@ -201,7 +203,7 @@ y_test = Scaled$scaled_test[, 2]
 x_test = Scaled$scaled_test[, 1]
 ```
 
-The following code will be required to revert the data to their original scale
+The following code will be required to invert the predicted values to the original scale.
 
 ```{r}
 ## inverse-transform
@@ -244,6 +246,9 @@ model%>%
 ```
 
 ## Compile the model
+
+Here I have specified the *mean_squared_error* as the loss function, Adaptive Monument Estimation (ADAM) as the optimization algorithm and learning rate and learning rate decay over each update. Finaly, I have used the *accuracy* as the metric to assess the model performance. 
+
 
 ``` {r}
 model %>% compile(
