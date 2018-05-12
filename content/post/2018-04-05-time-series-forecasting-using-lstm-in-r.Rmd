@@ -179,7 +179,7 @@ Just like in any other neural network models, we rescale the input data X to the
 
 
 ## scale data
-scale_data <- function(train, test, feature_range = c(0, 1)) {
+scale_data = function(train, test, feature_range = c(0, 1)) {
   x = train
   fr_min = feature_range[1]
   fr_max = feature_range[2]
@@ -301,7 +301,7 @@ Plot the values
 
 M = length(Series)
 
-(rmse = round(sqrt(mean(Series[(n+2): M]- predictions)^2), 3 ))
+rmse = round(sqrt(mean(Series[(n+2): M]- predictions)^2), 3 )
 
 YY = Series[(n+2):M]
 Y = Series[1:(n+1)]
@@ -320,7 +320,7 @@ lines(Series, type = 'l')
 #plot(Series[(n+2):M], type = 'l')
 #lines(predictions, col = 4)
 
-
+cat("RMSE: ", rmse)
 ```
 
 
