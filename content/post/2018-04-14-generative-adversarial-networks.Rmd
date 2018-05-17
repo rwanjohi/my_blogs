@@ -34,7 +34,7 @@ output:
 library(knitr)
 ```
 
-```{r  out.width = "20%", include= FALSE}
+```{r  out.width = "20%", echo = FALSE}
 include_graphics('E:/gan.png') 
 
 ```
