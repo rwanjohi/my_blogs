@@ -31,15 +31,15 @@ output:
 </div>
 
 <p><code>still under construction</code></p>
-<p>Mid 2017 R launched package <em>Keras</em>, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation <a href="https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/">here</a>. In this blog I will demonstrate how we can implement time series forecasting using LSTM in R.</p>
+<p>Mid 2017, R launched package <em>Keras</em>, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation <a href="https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/">here</a>. In this blog I will demonstrate how we can implement time series forecasting using LSTM in R.</p>
 <!--more-->
 <hr />
 <div id="brief-introduction" class="section level2">
 <h2>Brief Introduction</h2>
 <p>Time series involves data collected sequentially in time. I denote univariate data by $x_{t} \in \mathbb{R} $ where $t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $\mathcal{T} = \mathbb{Z} $ or continuous with $\mathcal{T} = \mathbb{R} $. For simplicity of the analysis we will consider only discrete time series.</p>
-<p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
+<p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients shrink asymptotically to zero, a condition known as vanishing gradient problem. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
 <p>The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating ‘Nothing goes through’ and 1 implying ‘Everything goes through’. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.</p>
-<p>The gates takes in, as input, the hidden states from previous time step $ h_{t-1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and bias $ b $ is added to the product.</p>
+<p>In general, the gates take in, as input, the hidden states from previous time step $ h_{t-1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and a bias $ b $ is added to the product.</p>
 <p>Three main gates:</p>
 <ol style="list-style-type: decimal">
 <li>Forget gate:
@@ -130,7 +130,7 @@ test  = supervised[(n+1):N,  ]</code></pre>
 </div>
 <div id="normalize-the-data" class="section level2">
 <h2>Normalize the data</h2>
-<p>Just like in any other neural network models, we rescale the input data X to the range of the activation function. As shown earlier the default activation function is sigmoid whose range is [-1, 1]. The code below will help transform our data to the range [-1, 1]</p>
+<p>Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier the default activation function for LSTM is sigmoid whose range is [-1, 1]. The code below will help transform our data to the range [-1, 1]</p>
 <pre class="r"><code>## scale data
 scale_data = function(train, test, feature_range = c(0, 1)) {
   x = train
@@ -174,11 +174,11 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 </div>
 <div id="define-the-model" class="section level2">
 <h2>Define the model</h2>
-<p>We set the argument <em>stateful</em>= TRUE, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</p>
+<p>LSTM expects the input batch shape to be a 3-dimensional array of [batch_size, timesteps, data_dim ] batch_size is the number of observations, timesteps is the We set the argument <em>stateful</em>= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch. Since the network is stateful, we have to provide the input batch in 3-dimensional arrary of [batch_size, timesteps, features] from the current [samples, f]</p>
 <pre class="r"><code># Reshape the input
 dim(x_train) &lt;- c(length(x_train), 1, 1)
 
-# specify required arguements
+# specify required arguments
 X_shape2 = dim(x_train)[2]
 X_shape3 = dim(x_train)[3]
 batch_size = 1
@@ -239,7 +239,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0.039</code></pre>
+<pre><code>## RMSE:  0.035</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
 </div>
