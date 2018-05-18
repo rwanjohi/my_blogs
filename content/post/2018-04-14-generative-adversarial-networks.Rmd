@@ -34,7 +34,7 @@ output:
 library(knitr)
 ```
 
-```{r  out.width = "20%", echo = FALSE}
+```{r  out.width = "100%", echo = FALSE}
 include_graphics('E:/gan.png') 
 
 ```
@@ -58,5 +58,7 @@ Given the objective function:
 
  The models are trained simultaneously with the  goal of  obtaining a Nash equilibrium.
 
+(gan.png)
 
+![Look at this](gan.png)
 
