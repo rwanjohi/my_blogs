@@ -15,7 +15,7 @@ output:
   blogdown::html_page:
     toc: true
     fig_width: 6
-    dev: "svg"
+   
 ---
 
 * GAN consist of two competing  models striving to outdo each other: the Generator and Discriminator models.
@@ -34,10 +34,15 @@ output:
 library(knitr)
 ```
 
-```{r  out.width = "100%", echo = FALSE}
-include_graphics('E:/gan.png') 
+
+
+```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+
+knitr::include_graphics('C:/Users/Richard/my_blogs/gan.png') 
 
 ```
+
+
 
 
 
@@ -58,7 +63,8 @@ Given the objective function:
 
  The models are trained simultaneously with the  goal of  obtaining a Nash equilibrium.
 
-(gan.png)
 
-![Look at this](gan.png)
+![Look at this](/Users/Richard/my_blogs/gan.png)
+
+
 

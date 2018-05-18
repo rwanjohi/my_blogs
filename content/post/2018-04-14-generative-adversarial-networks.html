@@ -15,7 +15,7 @@ output:
   blogdown::html_page:
     toc: true
     fig_width: 6
-    dev: "svg"
+   
 ---
 
 
@@ -34,7 +34,12 @@ output:
 </ul>
 <div id="diagramatically" class="section level3">
 <h3>Diagramatically…</h3>
-<p><img src="E:/gan.png" width="100%" /></p>
+<div class="figure"><span id="fig:pressure"></span>
+<img src="C:/Users/Richard/my_blogs/gan.PNG" alt="A caption" width="100%" />
+<p class="caption">
+Figure 1: A caption
+</p>
+</div>
 <hr />
 <p>Given the objective function:</p>
 <p><span class="math display">\[ \min_{G} \max_{D} F(G, D) = \log(D(x; \phi)) + \log(1- D( x^{&#39;}; \phi)) \]</span></p>
@@ -47,9 +52,8 @@ output:
 <li><p>Discriminator maximizes  by maximizing log <span class="math inline">\(p(y= fake|x^{&#39;})\)</span> and $ p(y= true|x) $</p></li>
 </ul>
 <p>The models are trained simultaneously with the goal of obtaining a Nash equilibrium.</p>
-<p>(gan.png)</p>
 <div class="figure">
-<img src="gan.png" alt="Look at this" />
+<img src="C:/Users/Richard/my_blogs/gan.PNG" alt="Look at this" />
 <p class="caption">Look at this</p>
 </div>
 </div>
