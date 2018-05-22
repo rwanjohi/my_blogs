@@ -174,15 +174,21 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 </div>
 <div id="define-the-model" class="section level2">
 <h2>Define the model</h2>
-<p>LSTM expects the input batch shape to be a 3-dimensional array of [batch_size, timesteps, data_dim ] batch_size is the number of observations, timesteps is the We set the argument <em>stateful</em>= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch. Since the network is stateful, we have to provide the input batch in 3-dimensional arrary of [batch_size, timesteps, features] from the current [samples, f]</p>
-<pre class="r"><code># Reshape the input
+<p>We set the argument <em>stateful</em>= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch. Since the network is stateful, we have to provide the input batch in 3-dimensional arrary, of the form [<em>samples</em>, <em>timesteps</em>, <em>features</em>], from the current [<em>samples</em>, <em>features</em>] where:</p>
+<ul>
+<li><p>Samples: number of observations in each batch, also known as the batch size.</p></li>
+<li><p>Timesteps: separate time steps for a given observations. In this example time steps = 1</p></li>
+<li><p>Features: measures observed at time of observation.</p></li>
+</ul>
+<p>These are separate measures observed at the time of observation The batch size must be a common factor of both the training and testing samples. 1 is a sure bet.</p>
+<pre class="r"><code># Reshape the input to 3-dim
 dim(x_train) &lt;- c(length(x_train), 1, 1)
 
 # specify required arguments
 X_shape2 = dim(x_train)[2]
 X_shape3 = dim(x_train)[3]
-batch_size = 1
-units = 4
+batch_size = 1                # must be a common factor of both the train and test samples
+units = 4                     # can adjust this, in model tuninig phase
 
 #=========================================================================================
 
@@ -239,7 +245,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0.04</code></pre>
+<pre><code>## RMSE:  0.041</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
 </div>
