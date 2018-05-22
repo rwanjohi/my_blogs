@@ -18,7 +18,7 @@ output:
 `still under construction ` 
 
 
-Mid 2017, R launched package *Keras*, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
+In mid 2017, R launched package *Keras*, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
 
 <!--more-->
 
@@ -29,7 +29,8 @@ Time series involves data collected sequentially in time. I denote univariate da
 $t \\in \\mathcal{T} $  is the time indexing when the data was observed. The time  $ t $  can be discrete in which case $\\mathcal{T} = \\mathbb{Z} $ or continuous  with $\\mathcal{T} = \\mathbb{R} $. 
 For simplicity of the analysis we will consider only discrete time series.
 
-Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients shrink asymptotically to zero, a condition known as vanishing gradient problem. 
+Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients diminish asymptotically to zero, a condition known as vanishing gradient problem.
+
 LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through *sigmoid* and *tanh* activation functions.
 
 The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating 'Nothing goes through' and 1 implying 'Everything goes through'. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.
@@ -63,7 +64,7 @@ Three main gates:
       
        $$ O_{t} = \sigma \big(W_{o}[h_{t-1}, x_{t}] + b_{o}) $$
        
-       +  The cell state $ C_{t} $ is then passed through tanh function to scale values to the range [-1, 1].
+       +  The cell state $ C_{t} $ is then passed through *tanh* function to scale the values to the range [-1, 1].
        +   Finally, the scaled cell state is multiplied by the filtered output to obtain the hidden state $ h_{t} $ to be passed on to the next cell:
        
        $$ h_{t} = O_{t} * tanh(C_{t}) $$ 
@@ -235,10 +236,10 @@ Since the network is stateful, we have to provide the input batch in 3-dimension
 
 + Timesteps: separate time steps for a given observations. In this example time steps = 1
 
-+ Features: measures observed at time of observation.
++ Features: measures observed at time of observation. For a univariate case, like in this example, the features = 1
 
-These are separate measures observed at the time of observation
-The batch size must be a common factor of both the training and testing samples. 1 is a sure bet.   
+The batch size must be a common factor of both the training and testing samples. 1 is a sure bet. 
+A nice explanation of LSTM input can be found [here](https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/)
 
 ```{r, results= 'hide'}
 # Reshape the input to 3-dim
