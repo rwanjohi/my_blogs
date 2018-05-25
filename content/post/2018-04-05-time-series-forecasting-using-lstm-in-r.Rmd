@@ -15,8 +15,6 @@ output:
     #fig_width: 6
     #dev: "svg"
 ---
-`still under construction ` 
-
 
 In mid 2017, R launched package *Keras*, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation [here](https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/). In this blog I will demonstrate how we can implement time series forecasting using LSTM in R. 
 
@@ -328,7 +326,7 @@ ypreds   = c(myNA, predictions)
 lines( ytests,col=2,lwd=2) 
 lines(ypreds, col = 3, lwd = 2)
 #lines(predictions, col = 2, type = 'l', pch = 16, lwd = 2, lty = 2)
-legend('topright', legend = c('test', 'prediction'), col = c(4, 2), lwd= 2, cex = 0.7)
+legend('topright', legend = c('train', 'test', 'prediction'), col = c(4, 2, 3), lwd= 2, cex = 0.7)
 lines(Series, type = 'l')
 
 
@@ -340,5 +338,5 @@ cat("RMSE: ", rmse)
 
 
 
-Get the entire code in [my git repo](https://github.com/rwanjohi/Keras-in-R)
+Get the entire code in [my git repo](https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R)
 

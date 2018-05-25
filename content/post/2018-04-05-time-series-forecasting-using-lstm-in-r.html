@@ -31,13 +31,14 @@ output:
 </div>
 
 <p><code>still under construction</code></p>
-<p>Mid 2017, R launched package <em>Keras</em>, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation <a href="https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/">here</a>. In this blog I will demonstrate how we can implement time series forecasting using LSTM in R.</p>
+<p>In mid 2017, R launched package <em>Keras</em>, a comprehensive library which runs on top of Tensorflow, with both CPU and GPU capabilities. I highlighted its implementation <a href="https://www.linkedin.com/pulse/finally-deep-learning-keras-tensorflow-r-richard-wanjohi-ph-d/">here</a>. In this blog I will demonstrate how we can implement time series forecasting using LSTM in R.</p>
 <!--more-->
 <hr />
 <div id="brief-introduction" class="section level2">
 <h2>Brief Introduction</h2>
 <p>Time series involves data collected sequentially in time. I denote univariate data by $x_{t} \in \mathbb{R} $ where $t \in \mathcal{T} $ is the time indexing when the data was observed. The time $ t $ can be discrete in which case $\mathcal{T} = \mathbb{Z} $ or continuous with $\mathcal{T} = \mathbb{R} $. For simplicity of the analysis we will consider only discrete time series.</p>
-<p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients shrink asymptotically to zero, a condition known as vanishing gradient problem. LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
+<p>Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients diminish asymptotically to zero, a condition known as vanishing gradient problem.</p>
+<p>LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through <em>sigmoid</em> and <em>tanh</em> activation functions.</p>
 <p>The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating ‘Nothing goes through’ and 1 implying ‘Everything goes through’. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.</p>
 <p>In general, the gates take in, as input, the hidden states from previous time step $ h_{t-1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and a bias $ b $ is added to the product.</p>
 <p>Three main gates:</p>
@@ -68,7 +69,7 @@ output:
 </ul>
 <p><span class="math display">\[ O_{t} = \sigma \big(W_{o}[h_{t-1}, x_{t}] + b_{o}) \]</span></p>
 <ul>
-<li>The cell state $ C_{t} $ is then passed through tanh function to scale values to the range [-1, 1].</li>
+<li>The cell state $ C_{t} $ is then passed through <em>tanh</em> function to scale the values to the range [-1, 1].</li>
 <li>Finally, the scaled cell state is multiplied by the filtered output to obtain the hidden state $ h_{t} $ to be passed on to the next cell:</li>
 </ul>
 <p><span class="math display">\[ h_{t} = O_{t} * tanh(C_{t}) \]</span></p></li>
@@ -178,9 +179,9 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 <ul>
 <li><p>Samples: number of observations in each batch, also known as the batch size.</p></li>
 <li><p>Timesteps: separate time steps for a given observations. In this example time steps = 1</p></li>
-<li><p>Features: measures observed at time of observation.</p></li>
+<li><p>Features: measures observed at time of observation. For a univariate case, like in this example, the features = 1</p></li>
 </ul>
-<p>These are separate measures observed at the time of observation The batch size must be a common factor of both the training and testing samples. 1 is a sure bet.</p>
+<p>The batch size must be a common factor of both the training and testing samples. 1 is a sure bet. A nice explanation of LSTM input can be found <a href="https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/">here</a></p>
 <pre class="r"><code># Reshape the input to 3-dim
 dim(x_train) &lt;- c(length(x_train), 1, 1)
 
@@ -245,7 +246,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0.036</code></pre>
+<pre><code>## RMSE:  0.041</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Keras-in-R">my git repo</a></p>
 </div>
 </div>
