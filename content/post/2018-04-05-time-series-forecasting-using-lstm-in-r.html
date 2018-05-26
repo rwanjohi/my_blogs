@@ -99,8 +99,8 @@ head(diffed)</code></pre>
 </div>
 <div id="lagged-dataset" class="section level2">
 <h2>Lagged dataset</h2>
-<p>LSTM expects the data to be in a supervised learning mode. That is, having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.</p>
-<pre class="r"><code>supervised_transform &lt;- function(x, k= 1){
+<p>LSTM expects the data to be in a supervised learning mode. That is, having a target variable Y and predictor X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-k) $ as the input and value at time $ t $ as the ouput, for a k-step lagged dataset.</p>
+<pre class="r"><code>lag_transform &lt;- function(x, k= 1){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
       DF = as.data.frame(cbind(lagged, x))
@@ -108,7 +108,7 @@ head(diffed)</code></pre>
       DF[is.na(DF)] &lt;- 0
       return(DF)
 }
-supervised = supervised_transform(diffed, 1)
+supervised = lag_transform(diffed, 1)
 head(supervised)</code></pre>
 <pre><code>##     x-1     x
 ## 1  0.00 -0.04
@@ -130,7 +130,7 @@ test  = supervised[(n+1):N,  ]</code></pre>
 </div>
 <div id="normalize-the-data" class="section level2">
 <h2>Normalize the data</h2>
-<p>Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier the default activation function for LSTM is sigmoid whose range is [-1, 1]. The code below will help transform our data to the range [-1, 1]</p>
+<p>Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this transformation.</p>
 <pre class="r"><code>## scale data
 scale_data = function(train, test, feature_range = c(0, 1)) {
   x = train
@@ -154,7 +154,7 @@ x_train = Scaled$scaled_train[, 1]
 
 y_test = Scaled$scaled_test[, 2]
 x_test = Scaled$scaled_test[, 1]</code></pre>
-<p>The following code will be required to invert the predicted values to the original scale.</p>
+<p>The following code will be required to revert the predicted values to the original scale.</p>
 <pre class="r"><code>## inverse-transform
 invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
   min = scaler[1]
@@ -174,13 +174,13 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 </div>
 <div id="define-the-model" class="section level2">
 <h2>Define the model</h2>
-<p>We set the argument <em>stateful</em>= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch. Since the network is stateful, we have to provide the input batch in 3-dimensional arrary, of the form [<em>samples</em>, <em>timesteps</em>, <em>features</em>], from the current [<em>samples</em>, <em>features</em>] where:</p>
+<p>We set the argument <em>stateful</em>= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch. Since the network is stateful, we have to provide the input batch in 3-dimensional array of the form [<em>samples</em>, <em>timesteps</em>, <em>features</em>] from the current [<em>samples</em>, <em>features</em>], where:</p>
 <ul>
-<li><p>Samples: number of observations in each batch, also known as the batch size.</p></li>
-<li><p>Timesteps: separate time steps for a given observations. In this example time steps = 1</p></li>
-<li><p>Features: measures observed at time of observation. For a univariate case, like in this example, the features = 1</p></li>
+<li><p>Samples: Number of observations in each batch, also known as the batch size.</p></li>
+<li><p>Timesteps: Separate time steps for a given observations. In this example the timesteps = 1</p></li>
+<li><p>Features: For a univariate case, like in this example, the features = 1</p></li>
 </ul>
-<p>The batch size must be a common factor of both the training and testing samples. 1 is a sure bet. A nice explanation of LSTM input can be found <a href="https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/">here</a></p>
+<p>The batch size must be a common factor of both the training and testing samples. 1 is always a sure bet. A nice explanation of LSTM input can be found <a href="https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/">here</a></p>
 <pre class="r"><code># Reshape the input to 3-dim
 dim(x_train) &lt;- c(length(x_train), 1, 1)
 
@@ -188,7 +188,7 @@ dim(x_train) &lt;- c(length(x_train), 1, 1)
 X_shape2 = dim(x_train)[2]
 X_shape3 = dim(x_train)[3]
 batch_size = 1                # must be a common factor of both the train and test samples
-units = 4                     # can adjust this, in model tuninig phase
+units = 1                     # can adjust this, in model tuninig phase
 
 #=========================================================================================
 
@@ -210,12 +210,12 @@ model%&gt;%
 <pre><code>## ___________________________________________________________________________
 ## Layer (type)                     Output Shape                  Param #     
 ## ===========================================================================
-## lstm_1 (LSTM)                    (1, 4)                        96          
+## lstm_1 (LSTM)                    (1, 1)                        12          
 ## ___________________________________________________________________________
-## dense_1 (Dense)                  (1, 1)                        5           
+## dense_1 (Dense)                  (1, 1)                        2           
 ## ===========================================================================
-## Total params: 101
-## Trainable params: 101
+## Total params: 14
+## Trainable params: 14
 ## Non-trainable params: 0
 ## ___________________________________________________________________________</code></pre>
 <div id="fit-the-model" class="section level4">
@@ -245,7 +245,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0.032</code></pre>
+<pre><code>## RMSE:  0.041</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R">my git repo</a></p>
 </div>
 </div>
