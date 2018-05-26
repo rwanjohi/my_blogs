@@ -138,11 +138,11 @@ head(diffed)
 
 ## Lagged dataset
 
-LSTM expects the data to be in a supervised learning mode. That is,  having a target variable Y and predictor, X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-1) $ as the input and value at time $ t $ as the ouput, for a 1-step lagged dataset.  
+LSTM expects the data to be in a supervised learning mode. That is,  having a target variable Y and predictor X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-k) $ as the input and value at time $ t $ as the ouput, for a k-step lagged dataset.  
 
 
 ```{r}
-supervised_transform <- function(x, k= 1){
+lag_transform <- function(x, k= 1){
     
       lagged =  c(rep(NA, k), x[1:(length(x)-k)])
       DF = as.data.frame(cbind(lagged, x))
@@ -150,7 +150,7 @@ supervised_transform <- function(x, k= 1){
       DF[is.na(DF)] <- 0
       return(DF)
 }
-supervised = supervised_transform(diffed, 1)
+supervised = lag_transform(diffed, 1)
 head(supervised)
 ```
 
@@ -171,7 +171,7 @@ test  = supervised[(n+1):N,  ]
 
 
 ## Normalize the data
-Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier the default activation function for LSTM is sigmoid whose range is [-1, 1]. The code below will help transform our data to the range [-1, 1]
+Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this  transformation.
 
 
 ```{r}
@@ -202,7 +202,7 @@ y_test = Scaled$scaled_test[, 2]
 x_test = Scaled$scaled_test[, 1]
 ```
 
-The following code will be required to invert the predicted values to the original scale.
+The following code will be required to revert the predicted values to the original scale.
 
 ```{r}
 ## inverse-transform
@@ -228,15 +228,15 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 ## Define the model
 
 We set the argument *stateful*= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch.
-Since the network is stateful, we have to provide the input batch in 3-dimensional arrary, of the form [*samples*, *timesteps*, *features*], from the current [*samples*, *features*] where: 
+Since the network is stateful, we have to provide the input batch in 3-dimensional array of the form [*samples*, *timesteps*, *features*] from the current [*samples*, *features*], where: 
 
-+ Samples: number of  observations in each batch, also known as the batch size.
++ Samples: Number of  observations in each batch, also known as the batch size.
 
-+ Timesteps: separate time steps for a given observations. In this example time steps = 1
++ Timesteps: Separate time steps for a given observations. In this example the timesteps = 1
 
-+ Features: measures observed at time of observation. For a univariate case, like in this example, the features = 1
++ Features: For a univariate case, like in this example, the features = 1
 
-The batch size must be a common factor of both the training and testing samples. 1 is a sure bet. 
+The batch size must be a common factor of both the training and testing samples. 1 is always a sure bet. 
 A nice explanation of LSTM input can be found [here](https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/)
 
 ```{r, results= 'hide'}
@@ -247,7 +247,7 @@ dim(x_train) <- c(length(x_train), 1, 1)
 X_shape2 = dim(x_train)[2]
 X_shape3 = dim(x_train)[3]
 batch_size = 1                # must be a common factor of both the train and test samples
-units = 4                     # can adjust this, in model tuninig phase
+units = 1                     # can adjust this, in model tuninig phase
 
 #=========================================================================================
 
