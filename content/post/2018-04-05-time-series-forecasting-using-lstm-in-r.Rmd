@@ -281,7 +281,7 @@ summary(model)
 We set the argument *shuffle* = FALSE to avoid shuffling the training set and maintain the dependencies between $ x_{i} $ and $ x_{i+t} $.  LSTM also requires resetting of the network state after each epoch. To achive this we run a loop over epochs where within each epoch we fit the model and reset the states via the argument *reset_states()*.
 
 ```{r, results= 'hide'}
-Epochs = 50   
+Epochs = 150   
 for(i in 1:Epochs ){
   model %>% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
   model %>% reset_states()
@@ -296,7 +296,6 @@ for(i in 1:L){
      X = x_test[i]
      dim(X) = c(1,1,1)
      yhat = model %>% predict(X, batch_size=batch_size)
-     yhat = y_test[i]
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
      # invert differencing
