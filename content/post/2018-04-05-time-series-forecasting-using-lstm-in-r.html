@@ -221,7 +221,7 @@ model%&gt;%
 <div id="fit-the-model" class="section level4">
 <h4>Fit the model</h4>
 <p>We set the argument <em>shuffle</em> = FALSE to avoid shuffling the training set and maintain the dependencies between $ x_{i} $ and $ x_{i+t} $. LSTM also requires resetting of the network state after each epoch. To achive this we run a loop over epochs where within each epoch we fit the model and reset the states via the argument <em>reset_states()</em>.</p>
-<pre class="r"><code>Epochs = 50   
+<pre class="r"><code>Epochs = 150   
 for(i in 1:Epochs ){
   model %&gt;% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
   model %&gt;% reset_states()
@@ -236,7 +236,6 @@ for(i in 1:L){
      X = x_test[i]
      dim(X) = c(1,1,1)
      yhat = model %&gt;% predict(X, batch_size=batch_size)
-     yhat = y_test[i]
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
      # invert differencing
@@ -246,7 +245,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0</code></pre>
+<pre><code>## RMSE:  0.053</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R">my git repo</a></p>
 </div>
 </div>
