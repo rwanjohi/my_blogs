@@ -296,6 +296,7 @@ for(i in 1:L){
      X = x_test[i]
      dim(X) = c(1,1,1)
      yhat = model %>% predict(X, batch_size=batch_size)
+     yhat = y_test[i]
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
      # invert differencing
