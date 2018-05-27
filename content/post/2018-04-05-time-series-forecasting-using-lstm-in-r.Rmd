@@ -337,6 +337,10 @@ cat("RMSE: ", rmse)
 ```
 
 
+![The plot is here](/Users/Richard/my_blogs/lstm.svg)
+
+
+
 
 Get the entire code in [my git repo](https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R)
 
