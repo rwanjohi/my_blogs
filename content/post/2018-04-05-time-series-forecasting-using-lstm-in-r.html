@@ -12,8 +12,8 @@ tags:
 output:
   blogdown::html_page:
     toc: true
-    #fig_width: 6
-    #dev: "svg"
+    fig_width: 6
+    dev: "svg"
 ---
 
 
@@ -85,7 +85,7 @@ library(tensorflow)</code></pre>
 library(keras)
 install_keras()</code></pre>
 <p>We will use the US long-term interest rates data, available <a href="http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&amp;lang=en">here</a> This is a monthly data from Jan 2007 to March 2018.</p>
-<p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-4-1.svg" width="576" /></p>
 <p>First five observations</p>
 <pre><code>## [1] 4.76 4.72 4.56 4.69 4.75 5.10</code></pre>
 </div>
@@ -244,8 +244,8 @@ for(i in 1:L){
      predictions[i] &lt;- yhat
 }</code></pre>
 <p>Plot the values</p>
-<p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## RMSE:  0.044</code></pre>
+<p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.svg" width="576" /></p>
+<pre><code>## RMSE:  0.033</code></pre>
 <div class="figure">
 <img src="C:/Users/Richard/my_blogs/lstm.svg" alt="The plot is here" />
 <p class="caption">The plot is here</p>
