@@ -27,11 +27,11 @@ Time series involves data collected sequentially in time. I denote univariate da
 $t \\in \\mathcal{T} $  is the time indexing when the data was observed. The time  $ t $  can be discrete in which case $\\mathcal{T} = \\mathbb{Z} $ or continuous  with $\\mathcal{T} = \\mathbb{R} $. 
 For simplicity of the analysis we will consider only discrete time series.
 
-Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN), that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients diminish asymptotically to zero, a condition known as vanishing gradient problem.
+Long Short Term Memory (LSTM) networks are special kind of Recurrent Neural Network (RNN) that are capable of learning long-term dependencies. In regular RNN small weights are multiplied over and over through several time steps and the gradients diminish asymptotically to zero- a condition known as vanishing gradient problem.
 
 LSTM netowrk typically consists of memory blocks, referred to as cells, connected through layers. The information in the cells is cointained in cell state $ C_{t} $ and hidden state $ h_{t} $ and it is regulated by mechanisms, known as gates, through *sigmoid* and *tanh* activation functions.
 
-The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating 'Nothing goes through' and 1 implying 'Everything goes through'. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.
+The sigmoid function/layer outputs numbers between 0 and 1 with 0 indicating *Nothing goes through* and 1 implying *Everything goes through*. LSTM, therefore, have the ability to, conditionally, add or delete information from the cell state.
 
 In general, the gates take in, as input, the hidden states from previous time step $ h_{t-1} $ and the current input $ x_{t} $ and multiply them pointwise by weight matrices, $ W $, and a bias $ b $ is added to the product.
 
@@ -39,7 +39,7 @@ Three main gates:
 
 1. Forget gate:
       + This determine what information will be deleted from the cell state. 
-      + The output is a number between 0 and 1 with 0 meaning 'delete all' and 1 implying 'remember all'
+      + The output is a number between 0 and 1 with 0 meaning *delete all* and 1 implying *remember all*
   
   $$ f_{t} = \sigma \big(W_{f}[h_{t-1}, x_{t}] + b_{f} \big) $$
   
@@ -89,7 +89,7 @@ install_keras()
 
 
 
-We will use the US long-term interest rates data, available [here](http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&lang=en)
+We will use the U.S. long-term interest rates data, available [here](http://stats.oecd.org/viewhtml.aspx?datasetcode=MEI_FIN&lang=en)
 This is a monthly data from Jan 2007 to March 2018.
 
 ```{r, results= 'hide', include= FALSE}
@@ -123,8 +123,9 @@ First five observations
 head(Series)
 ```
 
+## Data preparation
 
-## Transform data to stationary
+#### Transform data to stationary
 
 This is done by getting the difference between two consecutive values in the series. This transformation, commonly known as differencing, removes components in the data that are time dependent. Furthermore, it is easier to model using the difference, rather than the raw values, and the resulting model has a higher predictive power. 
 
@@ -136,7 +137,7 @@ head(diffed)
 
 
 
-## Lagged dataset
+#### Lagged dataset
 
 LSTM expects the data to be in a supervised learning mode. That is,  having a target variable Y and predictor X. To achieve this, we transform the series by lagging the series and have the value at time $ (t-k) $ as the input and value at time $ t $ as the ouput, for a k-step lagged dataset.  
 
@@ -155,9 +156,9 @@ head(supervised)
 ```
 
 
-## Split dataset into training and testing sets
+#### Split dataset into training and testing sets
 
-Unlike in most analysis where a random sample is picked, with time series data the order of the observations do matters. The following code split the first 70% of the series as training set and the remaining 30% as test set. 
+Unlike in most analysis where training and testing data sets are randomly sampled, with time series data the order of the observations does matter. The following code split the **first** 70% of the series as training set and the remaining 30% as test set. 
 
 ```{r}
 ## split into train and test sets
@@ -170,7 +171,7 @@ test  = supervised[(n+1):N,  ]
 ```
 
 
-## Normalize the data
+#### Normalize the data
 Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this  transformation. Note that the min and max values of the training data set are the scaling coefficients used to scale both the training and testing data sets as well as the predicted values. This ensures that the min and max values of the test data do not influence the model.  
 
 
@@ -224,8 +225,9 @@ invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
 
 ```
 
+## Modeling
 
-## Define the model
+#### Define the model
 
 We set the argument *stateful*= TRUE so that the internal states obtained after processing a batch of samples are reused as initial states for the samples of the next batch.
 Since the network is stateful, we have to provide the input batch in 3-dimensional array of the form [*samples*, *timesteps*, *features*] from the current [*samples*, *features*], where: 
@@ -236,7 +238,7 @@ Since the network is stateful, we have to provide the input batch in 3-dimension
 
 + Features: For a univariate case, like in this example, the features = 1
 
-The batch size must be a common factor of both the training and testing samples. 1 is always a sure bet. 
+The batch size must be a common factor of sizes of both the training and testing samples. 1 is always a sure bet. 
 A nice explanation of LSTM input can be found [here](https://machinelearningmastery.com/reshape-input-data-long-short-term-memory-networks-keras/)
 
 ```{r, results= 'hide'}
@@ -257,7 +259,8 @@ model%>%
   layer_dense(units = 1)
 ```
 
-## Compile the model
+
+#### Compile the model
 
 Here I have specified the *mean_squared_error* as the loss function, Adaptive Monument Estimation (ADAM) as the optimization algorithm and learning rate and learning rate decay over each update. Finaly, I have used the *accuracy* as the metric to assess the model performance. 
 
@@ -278,6 +281,7 @@ summary(model)
 ```
 
 #### Fit the model
+
 We set the argument *shuffle* = FALSE to avoid shuffling the training set and maintain the dependencies between $ x_{i} $ and $ x_{i+t} $.  LSTM also requires resetting of the network state after each epoch. To achive this we run a loop over epochs where within each epoch we fit the model and reset the states via the argument *reset_states()*.
 
 ```{r, results= 'hide'}
@@ -287,6 +291,11 @@ for(i in 1:Epochs ){
   model %>% reset_states()
 }
 
+```
+
+#### Make predictions
+
+```{r, results= 'hide'}
 
 L = length(x_test)
 scaler = Scaled$scaler
@@ -304,8 +313,8 @@ for(i in 1:L){
      predictions[i] <- yhat
 }
 
-
 ```
+
 
 Plot the values
 
@@ -338,4 +347,5 @@ cat("RMSE: ", rmse)
 
 
 Get the entire code in [my git repo](https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R)
+
 
