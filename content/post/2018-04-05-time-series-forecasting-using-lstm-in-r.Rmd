@@ -171,7 +171,7 @@ test  = supervised[(n+1):N,  ]
 
 
 ## Normalize the data
-Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this  transformation.
+Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this  transformation. Note that the min and max values of the training data set are the scaling coefficients used to scale both the training and testing data sets as well as the predicted values. This ensures that the min and max values of the test data do not influence the model.  
 
 
 ```{r}
@@ -265,7 +265,7 @@ Here I have specified the *mean_squared_error* as the loss function, Adaptive Mo
 ``` {r}
 model %>% compile(
   loss = 'mean_squared_error',
-  optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  
+  optimizer = optimizer_adam( lr= 0.02, decay = 1e-6 ),  
   metrics = c('accuracy')
 )
 
@@ -296,7 +296,6 @@ for(i in 1:L){
      X = x_test[i]
      dim(X) = c(1,1,1)
      yhat = model %>% predict(X, batch_size=batch_size)
-     yhat = y_test[i]
      # invert scaling
      yhat = invert_scaling(yhat, scaler,  c(-1, 1))
      # invert differencing
@@ -336,11 +335,6 @@ lines(Series, type = 'l')
 
 cat("RMSE: ", rmse)
 ```
-
-
-![The plot is here](/Users/Richard/my_blogs/lstm.svg)
-
-
 
 
 Get the entire code in [my git repo](https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R)

@@ -130,7 +130,7 @@ test  = supervised[(n+1):N,  ]</code></pre>
 </div>
 <div id="normalize-the-data" class="section level2">
 <h2>Normalize the data</h2>
-<p>Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this transformation.</p>
+<p>Just like in any other neural network model, we rescale the input data X to the range of the activation function. As shown earlier, the default activation function for LSTM is sigmoid function whose range is [-1, 1]. The code below will help in this transformation. Note that the min and max values of the training data set are the scaling coefficients used to scale both the training and testing data sets as well as the predicted values. This ensures that the min and max values of the test data do not influence the model.</p>
 <pre class="r"><code>## scale data
 scale_data = function(train, test, feature_range = c(0, 1)) {
   x = train
@@ -159,12 +159,12 @@ x_test = Scaled$scaled_test[, 1]</code></pre>
 invert_scaling = function(scaled, scaler, feature_range = c(0, 1)){
   min = scaler[1]
   max = scaler[2]
-  n = length(scaled)
+  t = length(scaled)
   mins = feature_range[1]
   maxs = feature_range[2]
-  inverted_dfs = numeric(n)
+  inverted_dfs = numeric(t)
   
-  for( i in 1:n){
+  for( i in 1:t){
     X = (scaled[i]- mins)/(maxs - mins)
     rawValues = X *(max - min) + min
     inverted_dfs[i] &lt;- rawValues
@@ -202,7 +202,7 @@ model%&gt;%
 <p>Here I have specified the <em>mean_squared_error</em> as the loss function, Adaptive Monument Estimation (ADAM) as the optimization algorithm and learning rate and learning rate decay over each update. Finaly, I have used the <em>accuracy</em> as the metric to assess the model performance.</p>
 <pre class="r"><code>model %&gt;% compile(
   loss = &#39;mean_squared_error&#39;,
-  optimizer = optimizer_adam( lr= 0.0001 , decay = 1e-6 ),  
+  optimizer = optimizer_adam( lr= 0.02, decay = 1e-6 ),  
   metrics = c(&#39;accuracy&#39;)
 )</code></pre>
 <p>Model summary</p>
@@ -221,7 +221,7 @@ model%&gt;%
 <div id="fit-the-model" class="section level4">
 <h4>Fit the model</h4>
 <p>We set the argument <em>shuffle</em> = FALSE to avoid shuffling the training set and maintain the dependencies between $ x_{i} $ and $ x_{i+t} $. LSTM also requires resetting of the network state after each epoch. To achive this we run a loop over epochs where within each epoch we fit the model and reset the states via the argument <em>reset_states()</em>.</p>
-<pre class="r"><code>Epochs = 150   
+<pre class="r"><code>Epochs = 50   
 for(i in 1:Epochs ){
   model %&gt;% fit(x_train, y_train, epochs=1, batch_size=batch_size, verbose=1, shuffle=FALSE)
   model %&gt;% reset_states()
@@ -245,11 +245,7 @@ for(i in 1:L){
 }</code></pre>
 <p>Plot the values</p>
 <p><img src="/post/2018-04-05-time-series-forecasting-using-lstm-in-r_files/figure-html/unnamed-chunk-15-1.svg" width="576" /></p>
-<pre><code>## RMSE:  0.033</code></pre>
-<div class="figure">
-<img src="C:/Users/Richard/my_blogs/lstm.svg" alt="The plot is here" />
-<p class="caption">The plot is here</p>
-</div>
+<pre><code>## RMSE:  0.015</code></pre>
 <p>Get the entire code in <a href="https://github.com/rwanjohi/Time-series-forecasting-using-LSTM-in-R/blob/master/LSTM%20Time%20series%20forecasting.R">my git repo</a></p>
 </div>
 </div>
