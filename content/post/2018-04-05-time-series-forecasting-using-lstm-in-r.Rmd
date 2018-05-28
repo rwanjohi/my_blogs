@@ -316,7 +316,7 @@ for(i in 1:L){
 ```
 
 
-Plot the values
+#### Plot the values
 
 
 ```{r, echo= FALSE, warning=FALSE, message=FALSE }
@@ -335,7 +335,7 @@ ypreds   = c(myNA, predictions)
 lines( ytests,col=2,lwd=2) 
 lines(ypreds, col = 3, lwd = 2)
 #lines(predictions, col = 2, type = 'l', pch = 16, lwd = 2, lty = 2)
-legend('topright', legend = c('train', 'test', 'prediction'), col = c(4, 2, 3), lwd= 2, cex = 0.7)
+legend('topright', legend = c('training', 'testing', 'predicted'), col = c(4, 2, 3), lwd= 2, cex = 0.7)
 lines(Series, type = 'l')
 
 
