@@ -5,8 +5,7 @@ menu = "main"
 disable_comments = true
 +++
 
-This website is a subsidiary, and only meant for blogs/articles etc..
-This [link](https://rwanjohi.github.io/index.html) will direct you to my regural website 
+This is a subsidiary website only meant for blogs/articles etc.. My regular website can be found  [here](https://rwanjohi.github.io/index.html)  
 
 
 
