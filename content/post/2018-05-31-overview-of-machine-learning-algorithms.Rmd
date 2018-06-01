@@ -13,7 +13,7 @@ tags:
 # Learning Styles:
 
 * Supervised Learning
-     + The values of target variable, in training set is known.
+     + The values of target variable, in training set are known.
      
 * Unsupervised Learning
      + data is not labeled and outcomes are unknown.
