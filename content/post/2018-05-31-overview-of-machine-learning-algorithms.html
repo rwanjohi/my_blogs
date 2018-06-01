@@ -1,0 +1,65 @@
+---
+title: Overview of Machine Learning Algorithms
+author: Richard Wanjohi, Ph.D
+date: '2018-05-31'
+slug: overview-of-machine-learning-algorithms
+categories: []
+tags:
+  - Python
+  - R
+---
+
+
+
+<hr />
+<div id="learning-styles" class="section level1">
+<h1>Learning Styles:</h1>
+<ul>
+<li>Supervised Learning
+<ul>
+<li>The values of target variable, in training set is known.</li>
+</ul></li>
+<li>Unsupervised Learning
+<ul>
+<li>data is not labeled and outcomes are unknown.</li>
+<li>Seek to find hidden structure in unlabeled data</li>
+<li>Example: Clustering algorithms</li>
+</ul></li>
+<li>Semi-supervised Learning
+<ul>
+<li>Uses both labeled and unlabeled data to improve supervised learning.</li>
+<li>Example: in Deep learning Generative models</li>
+</ul></li>
+</ul>
+</div>
+<div id="problems" class="section level1">
+<h1>Problems:</h1>
+<ul>
+<li>Classification problem: The target variable is qualitative (categorical/nominal)</li>
+<li>Binary- Two possible outcomes only
+<ul>
+<li>e.g. Yes/No, 0/1</li>
+</ul></li>
+<li>Multi-Class- More than 2 outcomes
+<ul>
+<li>e.g. Positive, Neutral or Negative customer sentiment/feedback</li>
+</ul></li>
+<li>Regression problem: The target is quantitative (discrete or continuous)</li>
+<li>Can take any real number in Real line
+<ul>
+<li>e.g. Stock prices, estimated revenue, interest rates, price of house, Number of accidents</li>
+</ul></li>
+</ul>
+<div id="others" class="section level3">
+<h3>Others:</h3>
+<ul>
+<li>Clustering</li>
+<li>Dimension reduction</li>
+</ul>
+<hr />
+<pre class="python"><code>import pandas as pd
+#from sklearn.cross_validation import train_test_split, StratifiedKFold 
+from sklearn.ensemble  import GradientBoostingClassifier as GBC, RandomForestClassifier
+from sklearn.model_selection import GridSearchCV</code></pre>
+</div>
+</div>
