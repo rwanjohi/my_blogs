@@ -1,7 +1,7 @@
 ---
 title: Overview of Machine Learning Algorithms
 author: Richard Wanjohi, Ph.D
-date: '2018-05-31'
+date: '2018-04-03'
 slug: overview-of-machine-learning-algorithms
 categories: []
 tags:
@@ -12,8 +12,8 @@ tags:
 
 
 <hr />
-<div id="learning-styles" class="section level1">
-<h1>Learning Styles:</h1>
+<div id="learning-styles" class="section level3">
+<h3>Learning Styles:</h3>
 <ul>
 <li>Supervised Learning
 <ul>
@@ -32,10 +32,11 @@ tags:
 </ul></li>
 </ul>
 </div>
-<div id="problems" class="section level1">
-<h1>Problems:</h1>
+<div id="problems" class="section level3">
+<h3>Problems:</h3>
 <ul>
-<li>Classification problem: The target variable is qualitative (categorical/nominal)</li>
+<li>Classification problem: The target variable is qualitative (categorical/nominal)
+<ul>
 <li>Binary- Two possible outcomes only
 <ul>
 <li>e.g. Yes/No, 0/1</li>
@@ -44,22 +45,64 @@ tags:
 <ul>
 <li>e.g. Positive, Neutral or Negative customer sentiment/feedback</li>
 </ul></li>
-<li>Regression problem: The target is quantitative (discrete or continuous)</li>
-<li>Can take any real number in Real line
+</ul></li>
+<li>Regression problem: The target is quantitative (discrete or continuous)
+<ul>
+<li>Can take any real number in real line
 <ul>
 <li>e.g. Stock prices, estimated revenue, interest rates, price of house, Number of accidents</li>
 </ul></li>
-</ul>
-<div id="others" class="section level3">
-<h3>Others:</h3>
+</ul></li>
+<li>Others:
 <ul>
 <li>Clustering</li>
 <li>Dimension reduction</li>
+</ul></li>
 </ul>
 <hr />
 <pre class="python"><code>import pandas as pd
 #from sklearn.cross_validation import train_test_split, StratifiedKFold 
 from sklearn.ensemble  import GradientBoostingClassifier as GBC, RandomForestClassifier
 from sklearn.model_selection import GridSearchCV</code></pre>
+<div id="linear-regression" class="section level4">
+<h4>1. Linear Regression:</h4>
+<hr />
 </div>
+<div id="logistic-regression" class="section level4">
+<h4>2. Logistic Regression</h4>
+<hr />
+</div>
+<div id="other-regression-problems" class="section level4">
+<h4>3. Other regression problems</h4>
+</div>
+<div id="classification-and-regression-trees-decision-tree" class="section level4">
+<h4>4. Classification and Regression Trees (Decision Tree)</h4>
+<hr />
+</div>
+<div id="naive-bayes" class="section level4">
+<h4>5. Naive Bayes</h4>
+<hr />
+</div>
+<div id="ensemble-models" class="section level4">
+<h4>6. Ensemble Models</h4>
+<ul>
+<li><p>Random Forest</p></li>
+<li>Boosted Trees
+<ul>
+<li>Adaptive boosting</li>
+<li>Gradient Boosting
+<ul>
+<li>Gradient boost</li>
+<li>XGBoost</li>
+<li>Catboost</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="support-vector-machine-svm" class="section level2">
+<h2>7. Support Vector Machine (SVM)</h2>
+</div>
+<div id="k-nearest-neigbour-knn" class="section level2">
+<h2>8. K-nearest neigbour (KNN)</h2>
 </div>
