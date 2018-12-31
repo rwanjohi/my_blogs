@@ -1,0 +1,71 @@
+
+---
+title: Deploy Deep Learning Models with Flask
+author: Richard Wanjohi, Ph.D
+date: '2018-10-11'
+slug: deploy-deep-learning-models-with-flask
+categories:
+  - Deep Learning
+tags:
+  - Keras
+  - Python
+  - Tensorflow
+  - Flask
+banner: ''
+description: ''
+images: ![](/post/2018-10-11-deploy-deep-learning-models-with-flask_files/prof1.jpg)
+menu: ''
+---
+
+## Introduction
+
+    
+
+## Load the neccessary libraries & the dataset
+
+
+```{r setup, include= FALSE}
+# Load the necessary packages
+library(reticulate)
+# py_config()
+paths = '/Users/richardwanjohi/anaconda3/bin/python'
+use_python(paths)
+
+```
+
+
+
+```{python, eval=FALSE}
+import pandas as pd
+import numpy as np
+```
+
+```{python}
+#import pandas as pd
+#import numpy as np
+x = 5
+```
+
+```{python}
+
+print(x)
+```
+
+```{r}
+print(py$x)
+```
+
+
+
+## Flask
+
+
+
+## Backend
+
+
+
+
+
+
+<!--more-->
