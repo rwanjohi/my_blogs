@@ -15,11 +15,24 @@ banner: ''
 description: ''
 images: ![](/post/2018-10-11-deploy-deep-learning-models-with-flask_files/prof1.jpg)
 menu: ''
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ## Introduction
 
-    
+there are various ways of deploying models:
+
+*  Load the model directly in the application. This is usually easy if the core application is writen in the same language as the model
+
+*   REST API with Python Web framework. [Flask](http://flask.pocoo.org) and [Django](https://www.djangoproject.com) are the most popular.
+
+*  Kubernetes and Docker Container: Package the model and dependencies in Docker container and use Kubernetes as orchestrator
+
+* AWS Lambda serverless service is another possible option. More details [here](https://aws.amazon.com/blogs/machine-learning/how-to-deploy-deep-learning-models-with-aws-lambda-and-tensorflow/) 
+
+### Pre-requisite 
+Python environment or Download Anaconda
 
 ## Load the neccessary libraries & the dataset
 
@@ -38,34 +51,215 @@ use_python(paths)
 ```{python, eval=FALSE}
 import pandas as pd
 import numpy as np
+import base64
+import numpy as np
+import io
+from PIL import Image
+from keras import backend as K
+from keras.models import Sequential
+from keras.models import load_model
+from keras.preprocessing.image import ImageDataGenerator, img_to_array
+from flask import request 
+from flask import jsonify 
+from flask import Flask
+
+
+from keras.applications.imagenet_utils import preprocess_input, decode_predictions
+# import the necessary packages
+from keras.applications.vgg19 import preprocess_input as VGG19_preprocess_input, VGG19
+from keras.preprocessing.image import img_to_array
+from keras.applications import imagenet_utils
+from PIL import Image
+import numpy as np
+import flask
+import io
+import tensorflow as tf
+
+import numpy as np
+import codecs, json 
+
+# Disables some tensorflow GPU/CPU warnings
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 ```
 
-```{python}
-#import pandas as pd
-#import numpy as np
-x = 5
+![Richards](/Users/richardwanjohi/me.jpg)
+
+![Look at this](/Users/richardwanjohi/my_blogs/static/img/prof1.jpg)
+
+
+
+
+
+
+
+
+### Create the App 
+```{python, eval=FALSE}
+
+app = Flask(__name__)
+
+def load_model():
+    global model, graph
+    model = VGG19(weights="imagenet")
+    print('--- Model loaded! ---')
+    graph = tf.get_default_graph()
 ```
 
-```{python}
-
-print(x)
-```
+### Prepare the Image
 
 ```{r}
-print(py$x)
+#print(py$x)
+```
+```{python, eval= FALSE}
+
+def prepare_image(image, target_size):
+    # if the image mode is not RGB, convert it
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+
+    # resize the input image and preprocess it
+    image = image.resize(target_size)
+    image = img_to_array(image)
+    image = np.expand_dims(image, axis=0)
+    #image = imagenet_utils.preprocess_input(image)
+
+    # return the processed image
+    return image
+
 ```
 
 
+### Next, predict function
+```{python, eval = FALSE}
+@app.route('/predict', methods = ['GET', 'POST']) 
+def predict():
+    # initialize the data dictionary that will be returned
+    # view
+    message = request.get_json(force = True)
+    encoded = message['image']
+    decoded = base64.b64decode(encoded)
+    with  graph.as_default(): 
+        image  = Image.open(io.BytesIO(decoded))
+        processed_image = prepare_image(image, target_size = (224, 224))
+        prediction = model.predict(processed_image)#.tolist()
+        prediction = decode_predictions(prediction, top= 3)
+        
+        response = {
+            'prediction':{
+                'likelihood': np.array(prediction[0][0][2]).tolist(),   #prediction[0][0][2]  
+                'object': np.array(prediction[0][0][1]).tolist(),
+                
+                 'likelihood1': np.array(prediction[0][1][2]).tolist(),   #prediction[0][0][2]  
+                'object1': np.array(prediction[0][1][1]).tolist(),
+                
+                 'likelihood2': np.array(prediction[0][2][2]).tolist(),   #prediction[0][0][2]  
+                'object2': np.array(prediction[0][2][1]).tolist()
+                
+                
+            }
+        }
+       
+         # return the data dictionary as a JSON response
+        return flask.jsonify(response)
+
+if __name__ == "__main__":
+    print(("* Loading Keras model and Flask starting server...\n \n"
+        "please wait until server has fully started"))
+    load_model()
+    app.run()
+
+
+
+```
 
 ## Flask
 
 
 
-## Backend
+## Frontend
+
+```{r,  eval = FALSE}
+
+<DOCTYPE html>
+<html>
+    <head>
+         <!-- link rel="shortcut icon" href="#" /-->
+         <title> Richard Wanjohi, Ph.D Deep Learning </title>
+        <style>
+            * { 
+                font-size:20px;
+            }
+        </style>
+    </head>
+    <body> 
+        <center> 
+        <input id='image-selector' type='file'>
+        <button id='predict-button' > Predict </button>
+        <p style='font-weight:bold; color:green; font-family:verdana' > Image Recognition using Deep Learning Model </p>
+        <p>Object: <span id='object-name'></span></p>
+        <p>Likelihood: <span id='object-prediction'></span></p>
+        
+         <p>Object2: <span id='object-name2'></span></p>
+        <p>Likelihood2: <span id='object-prediction2'></span></p>
+
+        <p>Object3: <span id='object-name3'></span></p>
+        <p>Likelihood3: <span id='object-prediction3'></span></p>
+
+        </center>
+        <img id='selected-image' src=""/>
+        <script src = 'https://code.jquery.com/jquery-3.3.1.min.js'></script>
+        <script>
+            let base64Image;
+            $("#image-selector").change(function() {
+                let reader = new FileReader();
+                reader.onload = function(e){
+                    let dataURL = reader.result;
+                    $('#selected-image').attr("src", dataURL);
+                    base64Image = dataURL.replace("data:image/jpeg;base64,","");
+                    console.log(base64Image);
+                }
+                reader.readAsDataURL($("#image-selector")[0].files[0]);
+                $("#object-name").text("");
+                $("#object-prediction").text("");
+                $("#object-name2").text("");
+                $("#object-prediction2").text("");
+                $("#object-name3").text("");
+                $("#object-prediction3").text("");
 
 
+                });
 
+            $("#predict-button").click(function(event){
+                let message = {
+                    image: base64Image
+                }
+                console.log(message);
+                $.post("http://127.0.0.1:5000/predict", JSON.stringify(message), function(response){
+                    $("#object-name").text(response.prediction.object);
+                    $("#object-prediction").text(response.prediction.likelihood.toFixed(6));
 
+                    $("#object-name2").text(response.prediction.object1);
+                    $("#object-prediction2").text(response.prediction.likelihood1.toFixed(6));
 
+                    $("#object-name3").text(response.prediction.object2);
+                    $("#object-prediction3").text(response.prediction.likelihood2.toFixed(6));
+
+                    console.log(response);
+
+                });
+            });
+        </script>
+    </body>
+    </html>
+    
+
+```
+
+On the terminal....
+
+```{}
+$ python3 prediction_app.py
+```
 
 <!--more-->
