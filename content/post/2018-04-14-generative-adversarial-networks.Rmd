@@ -17,7 +17,9 @@ output:
     fig_width: 6
    
 ---
-
+ 
+$\color{red}{\text{ Draft: Work in Progress.....  }}$ 
+  
 * GAN consist of two competing  models striving to outdo each other: the Generator and Discriminator models.
   
 * The Generator takes in random input and tries to generate real data (curves, images, texts, \ldots).
@@ -28,7 +30,7 @@ output:
 
 * The two models are trained simultaneously with  the aim that the continuous  competition will help produce data that is indistinguishable from the real data.
 
-### Diagramatically...
+**Diagramatically... **
 
 ```{r, include= FALSE}
 library(knitr)
@@ -64,7 +66,7 @@ Given the objective function:
  The models are trained simultaneously with the  goal of  obtaining a Nash equilibrium.
 
 
-![Look at this](/Users/Richard/my_blogs/gan.png)
+
 
 
 
