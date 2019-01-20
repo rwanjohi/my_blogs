@@ -20,10 +20,11 @@ editor_options:
 ---
 
 ## Introduction
+Deploying machine learning models in production is a significant challenge. 
+<!--more-->
+There are various ways of deploying `models`:
 
-there are various ways of deploying models:
-
-*  Load the model directly in the application. This is usually easy if the core application is writen in the same language as the model
+*  Load the model directly in the application. This is could be easy if the core application is writen in the same language as the model. In most cases, it is not. 
 
 *   REST API with Python Web framework. [Flask](http://flask.pocoo.org) and [Django](https://www.djangoproject.com) are the most popular.
 
@@ -31,10 +32,39 @@ there are various ways of deploying models:
 
 * AWS Lambda serverless service is another possible option. More details [here](https://aws.amazon.com/blogs/machine-learning/how-to-deploy-deep-learning-models-with-aws-lambda-and-tensorflow/) 
 
+In this tutorial, I will build backend Flask service to host my Keras Deep Learning model. I will also build a frontend Web services application- out of html and javascript- that will interact with the model and request predictions on the images provided.
+
 ### Pre-requisite 
 Python environment or Download Anaconda
 
-## Load the neccessary libraries & the dataset
+*  install virtual
+*  Create a folder, **flaskapp**  say.
+*  Create, set up and activate a virtual environment, as shown in the codes below:  
+* 
+***
+```{}  
+$ sudo pip install virtualenv
+$ mkdir flaskapp
+$ cd flaskapp
+$ virtualenv env
+$ source env/bin/activate
+$ jupyter notebook
+```
+
+*** 
+
+* The last code should open a jupyter notebook in the browser. 
+
+In the jupyter notebook, you should be able to see the **flaskapp** folder that you created.
+
+  *  Open the folder and create a new text file.
+  *  Rename it  `prediction_app.py`. 
+  *  We will use that file to build the flask app backend as described in the next section,
+
+
+# Front End
+
+##### 1. Load the neccessary libraries & the dataset
 
 
 ```{r setup, include= FALSE}
@@ -49,68 +79,77 @@ use_python(paths)
 
 
 ```{python, eval=FALSE}
-import pandas as pd
 import numpy as np
 import base64
 import numpy as np
 import io
 from PIL import Image
 from keras import backend as K
-from keras.models import Sequential
 from keras.models import load_model
-from keras.preprocessing.image import ImageDataGenerator, img_to_array
+from keras.preprocessing.image import  img_to_array
 from flask import request 
 from flask import jsonify 
 from flask import Flask
-
-
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-# import the necessary packages
 from keras.applications.vgg19 import preprocess_input as VGG19_preprocess_input, VGG19
 from keras.preprocessing.image import img_to_array
 from keras.applications import imagenet_utils
-from PIL import Image
-import numpy as np
-import flask
-import io
 import tensorflow as tf
-
-import numpy as np
-import codecs, json 
-
-# Disables some tensorflow GPU/CPU warnings
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 ```
 
-![Richards](/Users/richardwanjohi/me.jpg)
-
-![Look at this](/Users/richardwanjohi/my_blogs/static/img/prof1.jpg)
 
 
+```{r, include= FALSE}
+library(knitr)
+```
 
-
-
-
-
-
-### Create the App 
+##### 2. Create the App 
 ```{python, eval=FALSE}
 
 app = Flask(__name__)
+```
 
+
+##### 3a. Load the model
+The following function enables you to load your saved model or one of several pre-trained models that comes with Keras. 
+
+```{python, eval = FALSE}
 def load_model():
     global model, graph
-    model = VGG19(weights="imagenet")
+    model = Inception(weights="imagenet")
     print('--- Model loaded! ---')
     graph = tf.get_default_graph()
 ```
 
-### Prepare the Image
 
-```{r}
-#print(py$x)
+In this example I am using the pre-trained model,  *Inception*, by Google. 
+
+Other  pre-trained models included in Keras package are  *VGG16*, *VGG19*, *ResNet50*, *Xception*, *MobileNet*. These state-of-the-art models are trained on ImageNet dataset, and they are commonly used in transfer learning to generalize classification outside of the ImageNet dataset. 
+
+Loading your earlier saved model could be done using the following function:
+
+##### 3b. Loading saved model
+```{python, evaluate = FALSE}
+def load_model():
+    global model, graph
+    from keras.models import model_from_json
+    # load json and create model
+    json_file = open('/modelpath/SavedModel.json', 'r')
+    Load_model = json_file.read()
+    json_file.close()
+    model = model_from_json(Load_model)
+    # load weights into new model
+    model.load_weights("/modelpath/SavedModel.h5")
+    graph = tf.get_default_graph()
+      
 ```
+
+
+
+##### 4. Prepare the Image
+
 ```{python, eval= FALSE}
 
 def prepare_image(image, target_size):
@@ -122,7 +161,7 @@ def prepare_image(image, target_size):
     image = image.resize(target_size)
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
-    #image = imagenet_utils.preprocess_input(image)
+    image = imagenet_utils.preprocess_input(image)
 
     # return the processed image
     return image
@@ -130,33 +169,28 @@ def prepare_image(image, target_size):
 ```
 
 
-### Next, predict function
+##### 5. Predict function
+
 ```{python, eval = FALSE}
 @app.route('/predict', methods = ['GET', 'POST']) 
 def predict():
-    # initialize the data dictionary that will be returned
-    # view
     message = request.get_json(force = True)
     encoded = message['image']
     decoded = base64.b64decode(encoded)
     with  graph.as_default(): 
         image  = Image.open(io.BytesIO(decoded))
         processed_image = prepare_image(image, target_size = (224, 224))
-        prediction = model.predict(processed_image)#.tolist()
+        prediction = model.predict(processed_image)
         prediction = decode_predictions(prediction, top= 3)
         
         response = {
             'prediction':{
-                'likelihood': np.array(prediction[0][0][2]).tolist(),   #prediction[0][0][2]  
+                'likelihood': np.array(prediction[0][0][2]).tolist(),     
                 'object': np.array(prediction[0][0][1]).tolist(),
-                
-                 'likelihood1': np.array(prediction[0][1][2]).tolist(),   #prediction[0][0][2]  
+                 'likelihood1': np.array(prediction[0][1][2]).tolist(),   
                 'object1': np.array(prediction[0][1][1]).tolist(),
-                
-                 'likelihood2': np.array(prediction[0][2][2]).tolist(),   #prediction[0][0][2]  
+                 'likelihood2': np.array(prediction[0][2][2]).tolist(),  
                 'object2': np.array(prediction[0][2][1]).tolist()
-                
-                
             }
         }
        
@@ -164,8 +198,8 @@ def predict():
         return flask.jsonify(response)
 
 if __name__ == "__main__":
-    print(("* Loading Keras model and Flask starting server...\n \n"
-        "please wait until server has fully started"))
+    print(("* Loading Keras model ...\n \n"
+        ""))
     load_model()
     app.run()
 
@@ -173,18 +207,22 @@ if __name__ == "__main__":
 
 ```
 
-## Flask
+Copy and paste sub-sections, 1-5, above, with either 3a or 3b depending, in *prediction_app.py*
+
+# Front end
+
+We will make front end using html and javascript. Copy and paste the code and 
+
+You can adjust the *head* portion of the html to your liking. I will discuss 
 
 
 
-## Frontend
 
 ```{r,  eval = FALSE}
 
 <DOCTYPE html>
 <html>
     <head>
-         <!-- link rel="shortcut icon" href="#" /-->
          <title> Richard Wanjohi, Ph.D Deep Learning </title>
         <style>
             * { 
@@ -256,10 +294,22 @@ if __name__ == "__main__":
 
 ```
 
-On the terminal....
+On the terminal, use Control-C to shut down the jupyter notebook.. then start the app as follows. 
 
 ```{}
 $ python3 prediction_app.py
 ```
+Then at the browser, paste `http://127.0.0.1:5000/static/predict.html` and you should see your front end
 
-<!--more-->
+```{r  out.width = "70%", echo= FALSE}
+knitr::include_graphics('/img/output11.png') 
+```
+
+
+Choose a file, a png or jpeg and click `Predict` and viola!
+
+```{r  out.width = "70%", echo= FALSE}
+knitr::include_graphics('/img/output10.png') 
+```
+
+
