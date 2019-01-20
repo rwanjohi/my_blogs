@@ -204,9 +204,6 @@ if __name__ == "__main__":
     print("\n*** Loading the Deep Learning Model ...... \n " )
     load_model()
     app.run()
-
-
-
 ```
 
 Copy and paste sub-sections, 1-5, above, with either 3a or 3b depending, in *prediction_app.py*
@@ -264,14 +261,11 @@ You can adjust the *head* portion of the html to your liking. I will discuss
                     $("#object-name").text(response.prediction.label);
                     $("#object-prediction").text(response.prediction.probability.toFixed(6));
                     console.log(response);
-
                 });
             });
         </script>
     </body>
     </html>
-    
-
 ```
 
 On the terminal, use Control-C to shut down the jupyter notebook.. then start the app as follows. 
