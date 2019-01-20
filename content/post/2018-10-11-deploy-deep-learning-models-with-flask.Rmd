@@ -176,32 +176,32 @@ def prepare_image(image, target_size):
 ```{python, eval = FALSE}
 @app.route('/predict', methods = ['GET', 'POST']) 
 def predict():
+    # initialize the data dictionary that will be returned
     message = request.get_json(force = True)
     encoded = message['image']
     decoded = base64.b64decode(encoded)
     with  graph.as_default(): 
         image  = Image.open(io.BytesIO(decoded))
-        processed_image = prepare_image(image, target_size = (224, 224))
-        prediction = model.predict(processed_image)
-        prediction = decode_predictions(prediction, top= 3)
-        
-        response = {
-            'prediction':{
-                'likelihood': np.array(prediction[0][0][2]).tolist(),     
-                'object': np.array(prediction[0][0][1]).tolist(),
-                 'likelihood1': np.array(prediction[0][1][2]).tolist(),   
-                'object1': np.array(prediction[0][1][1]).tolist(),
-                 'likelihood2': np.array(prediction[0][2][2]).tolist(),  
-                'object2': np.array(prediction[0][2][1]).tolist()
+        if image is not None:
+            processed_image = prepare_image(image, target_size = (224, 224))
+            prediction = model.predict(processed_image)
+            prediction = decode_predictions(prediction, top= 1)
+            response = {
+                'predictions':{
+                    'probability': np.array(prediction[0][0][2]).tolist(),     
+                    'label': np.array(prediction[0][0][1]).tolist()
+                }
             }
-        }
-       
+        
+
          # return the data dictionary as a JSON response
-        return flask.jsonify(response)
+            return jsonify(response)
+        else:
+            return None, 'Error loading Image file'
+
 
 if __name__ == "__main__":
-    print(("* Loading Keras model ...\n \n"
-        ""))
+    print("\n*** Loading the Deep Learning Model ...... \n " )
     load_model()
     app.run()
 
@@ -227,9 +227,7 @@ You can adjust the *head* portion of the html to your liking. I will discuss
     <head>
          <title> Richard Wanjohi, Ph.D Deep Learning </title>
         <style>
-            * { 
-                font-size:20px;
-            }
+            * { font-size:20px; }
         </style>
     </head>
     <body> 
@@ -239,13 +237,6 @@ You can adjust the *head* portion of the html to your liking. I will discuss
         <p style='font-weight:bold; color:green; font-family:verdana' > Image Recognition using Deep Learning Model </p>
         <p>Object: <span id='object-name'></span></p>
         <p>Likelihood: <span id='object-prediction'></span></p>
-        
-         <p>Object2: <span id='object-name2'></span></p>
-        <p>Likelihood2: <span id='object-prediction2'></span></p>
-
-        <p>Object3: <span id='object-name3'></span></p>
-        <p>Likelihood3: <span id='object-prediction3'></span></p>
-
         </center>
         <img id='selected-image' src=""/>
         <script src = 'https://code.jquery.com/jquery-3.3.1.min.js'></script>
@@ -262,12 +253,6 @@ You can adjust the *head* portion of the html to your liking. I will discuss
                 reader.readAsDataURL($("#image-selector")[0].files[0]);
                 $("#object-name").text("");
                 $("#object-prediction").text("");
-                $("#object-name2").text("");
-                $("#object-prediction2").text("");
-                $("#object-name3").text("");
-                $("#object-prediction3").text("");
-
-
                 });
 
             $("#predict-button").click(function(event){
@@ -276,15 +261,8 @@ You can adjust the *head* portion of the html to your liking. I will discuss
                 }
                 console.log(message);
                 $.post("http://127.0.0.1:5000/predict", JSON.stringify(message), function(response){
-                    $("#object-name").text(response.prediction.object);
-                    $("#object-prediction").text(response.prediction.likelihood.toFixed(6));
-
-                    $("#object-name2").text(response.prediction.object1);
-                    $("#object-prediction2").text(response.prediction.likelihood1.toFixed(6));
-
-                    $("#object-name3").text(response.prediction.object2);
-                    $("#object-prediction3").text(response.prediction.likelihood2.toFixed(6));
-
+                    $("#object-name").text(response.prediction.label);
+                    $("#object-prediction").text(response.prediction.probability.toFixed(6));
                     console.log(response);
 
                 });

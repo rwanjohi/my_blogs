@@ -131,31 +131,29 @@ os.environ[&#39;TF_CPP_MIN_LOG_LEVEL&#39;] = &#39;2&#39;</code></pre>
 <h5>5. Predict function</h5>
 <pre class="python"><code>@app.route(&#39;/predict&#39;, methods = [&#39;GET&#39;, &#39;POST&#39;]) 
 def predict():
+    # initialize the data dictionary that will be returned
     message = request.get_json(force = True)
     encoded = message[&#39;image&#39;]
     decoded = base64.b64decode(encoded)
     with  graph.as_default(): 
         image  = Image.open(io.BytesIO(decoded))
-        processed_image = prepare_image(image, target_size = (224, 224))
-        prediction = model.predict(processed_image)
-        prediction = decode_predictions(prediction, top= 3)
-        
-        response = {
-            &#39;prediction&#39;:{
-                &#39;likelihood&#39;: np.array(prediction[0][0][2]).tolist(),     
-                &#39;object&#39;: np.array(prediction[0][0][1]).tolist(),
-                 &#39;likelihood1&#39;: np.array(prediction[0][1][2]).tolist(),   
-                &#39;object1&#39;: np.array(prediction[0][1][1]).tolist(),
-                 &#39;likelihood2&#39;: np.array(prediction[0][2][2]).tolist(),  
-                &#39;object2&#39;: np.array(prediction[0][2][1]).tolist()
+        if image is not None:
+            processed_image = prepare_image(image, target_size = (224, 224))
+            prediction = model.predict(processed_image)
+            prediction = decode_predictions(prediction, top= 1)
+            response = {
+                &#39;predictions&#39;:{
+                    &#39;probability&#39;: np.array(prediction[0][0][2]).tolist(),     
+                    &#39;label&#39;: np.array(prediction[0][0][1]).tolist()
+                }
             }
-        }
-       
+        
          # return the data dictionary as a JSON response
-        return flask.jsonify(response)
+            return jsonify(response)
+        else:
+            return None, &#39;Error loading Image file&#39;
 if __name__ == &quot;__main__&quot;:
-    print((&quot;* Loading Keras model ...\n \n&quot;
-        &quot;&quot;))
+    print(&quot;\n*** Loading the Deep Learning Model ...... \n &quot; )
     load_model()
     app.run()</code></pre>
 <p>Copy and paste sub-sections, 1-5, above, with either 3a or 3b depending, in <em>prediction_app.py</em></p>
@@ -170,9 +168,7 @@ if __name__ == &quot;__main__&quot;:
     &lt;head&gt;
          &lt;title&gt; Richard Wanjohi, Ph.D Deep Learning &lt;/title&gt;
         &lt;style&gt;
-            * { 
-                font-size:20px;
-            }
+            * { font-size:20px; }
         &lt;/style&gt;
     &lt;/head&gt;
     &lt;body&gt; 
@@ -182,13 +178,6 @@ if __name__ == &quot;__main__&quot;:
         &lt;p style=&#39;font-weight:bold; color:green; font-family:verdana&#39; &gt; Image Recognition using Deep Learning Model &lt;/p&gt;
         &lt;p&gt;Object: &lt;span id=&#39;object-name&#39;&gt;&lt;/span&gt;&lt;/p&gt;
         &lt;p&gt;Likelihood: &lt;span id=&#39;object-prediction&#39;&gt;&lt;/span&gt;&lt;/p&gt;
-        
-         &lt;p&gt;Object2: &lt;span id=&#39;object-name2&#39;&gt;&lt;/span&gt;&lt;/p&gt;
-        &lt;p&gt;Likelihood2: &lt;span id=&#39;object-prediction2&#39;&gt;&lt;/span&gt;&lt;/p&gt;
-
-        &lt;p&gt;Object3: &lt;span id=&#39;object-name3&#39;&gt;&lt;/span&gt;&lt;/p&gt;
-        &lt;p&gt;Likelihood3: &lt;span id=&#39;object-prediction3&#39;&gt;&lt;/span&gt;&lt;/p&gt;
-
         &lt;/center&gt;
         &lt;img id=&#39;selected-image&#39; src=&quot;&quot;/&gt;
         &lt;script src = &#39;https://code.jquery.com/jquery-3.3.1.min.js&#39;&gt;&lt;/script&gt;
@@ -205,11 +194,6 @@ if __name__ == &quot;__main__&quot;:
                 reader.readAsDataURL($(&quot;#image-selector&quot;)[0].files[0]);
                 $(&quot;#object-name&quot;).text(&quot;&quot;);
                 $(&quot;#object-prediction&quot;).text(&quot;&quot;);
-                $(&quot;#object-name2&quot;).text(&quot;&quot;);
-                $(&quot;#object-prediction2&quot;).text(&quot;&quot;);
-                $(&quot;#object-name3&quot;).text(&quot;&quot;);
-                $(&quot;#object-prediction3&quot;).text(&quot;&quot;);
-
                 });
 
             $(&quot;#predict-button&quot;).click(function(event){
@@ -218,15 +202,8 @@ if __name__ == &quot;__main__&quot;:
                 }
                 console.log(message);
                 $.post(&quot;http://127.0.0.1:5000/predict&quot;, JSON.stringify(message), function(response){
-                    $(&quot;#object-name&quot;).text(response.prediction.object);
-                    $(&quot;#object-prediction&quot;).text(response.prediction.likelihood.toFixed(6));
-
-                    $(&quot;#object-name2&quot;).text(response.prediction.object1);
-                    $(&quot;#object-prediction2&quot;).text(response.prediction.likelihood1.toFixed(6));
-
-                    $(&quot;#object-name3&quot;).text(response.prediction.object2);
-                    $(&quot;#object-prediction3&quot;).text(response.prediction.likelihood2.toFixed(6));
-
+                    $(&quot;#object-name&quot;).text(response.prediction.label);
+                    $(&quot;#object-prediction&quot;).text(response.prediction.probability.toFixed(6));
                     console.log(response);
 
                 });
