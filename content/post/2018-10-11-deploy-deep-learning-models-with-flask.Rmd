@@ -272,7 +272,7 @@ The second script tag embeds all the other javascript:
 * The jQuery **click** function details the events after the predict button is clicked. In the function: 
 
     1.  A  message variable is defined whose **key** is *image* and the  **value** is the base64 encoded image. 
-    2.  A POST request is made to the predict endpoint (in the Back-End), with message variable converted to JSON 
+    2.  A POST request is made to the predict endpoint (in the Back-End), with message variable converted to json. 
     3.  The response contains predictions **key** whose values are label of predicted image and the corresponding probability. (These are from the **repsonse** variable explained in the Back-End)
     4. Once the response is obtained from the endpoint, the `object-name` and `object-prediction` are set to predictions label and the corresponding probability respectively.
 
