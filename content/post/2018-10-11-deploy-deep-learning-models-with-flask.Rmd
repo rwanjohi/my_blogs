@@ -263,11 +263,11 @@ We import jQuery via the script  `<script src = 'https://code.jquery.com/jquery-
 
 The second script tag embeds all the other javascript: 
 
-*  The jQuery **change** function triggers change event after the Image is selected from the browse button: 
+*  The jQuery **change** function triggers change event after the Image is selected from the browse button. The following happens: 
 
-      1.  Load the file object via the FileReader
-      2.  Read the file from the file object and log the base64 encoded content to the console. 
-      3.  Clears the texts in the **Results** sections when a new image is selected. 
+      1.  The file object is loaded via the FileReader
+      2.  The file from the file object is read and the base64 encoded content is logged to the console. 
+      3.  The texts in the **Results** sections are cleared when a new image is selected. 
 
 * The jQuery **click** function details the events after the predict button is clicked. In the function: 
 
