@@ -22,7 +22,7 @@ theme = "hugo-icarus-theme"
 [params]
     # Tell me who you are
     author = "Richard Wanjohi, Ph.D"
-    bio = "Data Scientist"
+    bio = "Senior Data Scientist"
     location = "Kansas City, Missouri"
     site_description = ""
     copyright  = "Richard Wanjohi, Ph.D -- Powered by [Hugo](//gohugo.io)."

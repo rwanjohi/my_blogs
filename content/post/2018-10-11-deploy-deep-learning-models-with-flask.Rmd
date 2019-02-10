@@ -19,54 +19,85 @@ editor_options:
   chunk_output_type: inline
 ---
 
-$\color{red}{\text{ Draft: Work in Progress.....  }}$ 
+
 
 ## Introduction
-Deploying machine learning models in production is a significant challenge. 
-<!--more-->
-There are various ways of deploying `models`:
 
-*  Load the model directly in the application. This is could be easy if the core application is writen in the same language as the model. In most cases, it is not. 
 
-*   REST API with Python Web framework. [Flask](http://flask.pocoo.org) and [Django](https://www.djangoproject.com) are the most popular.
+Nowadays it is easy to build - train and tune - powerful  machine learning (ML) models using tools like Spark, Conda, Keras, R etc. The business value of these models, however, only comes from deploying the models into production. 
 
-*  Kubernetes and Docker Container: Package the model and dependencies in Docker container and use Kubernetes as orchestrator
+Deploying Machine Learning models in production is still a significant challenge. There is no general strategy that fits every ML problem and/or every company's need.
+
+Deployment can be done in wide variety of ways, which entails  either loading the model directly into the application or making API's and calling them from the application.  
+
+The strategy you choose will depend on various factors, such as: type of model you're using, whether model training is online or offline, whether predictions are batch or on-demand. Other considerations include performance requirements and degree of feature engineering. 
+
+Some strategies:
+
+*  Load the model directly in the application. This could be easy if the core application is written in the same language as the model. In most cases, it is not. 
+
+* Building customized REST API with Python Web framework. [Flask](http://flask.pocoo.org), [Django](https://www.djangoproject.com) and [Dash](https://plot.ly/products/dash/)  are the most popular. 
+
+*  Kubernetes and Docker Container: The model and dependancies are packaged in Docker container and Kubernetes is used as orchestrator. As an orchestration manager, Kubernetes can handle among others things, automated health checks and autoscaling. 
 
 * AWS Lambda serverless service is another possible option. More details [here](https://aws.amazon.com/blogs/machine-learning/how-to-deploy-deep-learning-models-with-aws-lambda-and-tensorflow/) 
 
-In this tutorial, I will build backend Flask service to host my Keras Deep Learning model. I will also build a frontend Web services application- out of html and javascript- that will interact with the model and request predictions on the images provided.
+* Tensorflow Serving: An open-source high-performance serving system for Machine Learning models. More details [here](https://www.tensorflow.org/serving/)
+
+* Using Shiny Server or shinyapps.io to host shiny appications. More details [here](https://www.rstudio.com/products/shiny/shiny-server/) 
+
+
+In this simple tutorial, I will demonstrate how to build a simple Flask Web service for image recognition. I will do so by building back-end Flask service to host my Keras Deep Learning model. I will also build a front-end Web services application- out of html and javascript- that will interact with the Keras model and request predictions on the images provided.
 
 ### Pre-requisite 
-Python environment or Download Anaconda
+* If you do not have, download Anaconda [here](https://www.anaconda.com/distribution/#download-section)
+* You will obviously require your terminal. For Windows users, I would recommend that you download and use [Git for Windows](https://gitforwindows.org)
 
-*  install virtual
-*  Create a folder, **flaskapp**  say.
-*  Create, set up and activate a virtual environment, as shown in the codes below:  
-* 
-***
+*  In your terminal, create, set up and activate a virtual environment, as shown in the codes below: 
+
+
 ```{}  
 $ sudo pip install virtualenv
-$ mkdir flaskapp
-$ cd flaskapp
+$ mkdir FlaskApp
+$ cd FlaskApp
 $ virtualenv env
 $ source env/bin/activate
+$ pip install flask
+$ pip install tensorflow
+$ pip install keras
+$ pip install Pillow
 $ jupyter notebook
 ```
 
-*** 
+*  Explanation:
 
-* The last code should open a jupyter notebook in the browser. 
+      1. In the first step, we **install** the virtual environment. If you prefer to use Conda environment then use the command ` $ conda create -n myenvironment ` instead.
 
-In the jupyter notebook, you should be able to see the **flaskapp** folder that you created.
+      2.  Next we create a folder called **FlaskApp** and then *cd* into it. 
 
-  *  Open the folder and create a new text file.
-  *  Rename it  `prediction_app.py`. 
-  *  We will use that file to build the flask app backend as described in the next section,
+      3. Next,  we **set up** the virtual envrionment by using the command `virtualenv`. If you chose to use Conda environment, you do not need this step. 
+
+      4.  The command `source env/bin/activate` **activates**  the virtual environment. To deactivate just use `deactivate`.  Conda environment is activated and deactivated  by using `source activate myenvironment` and  `source deactivate myenvironment` respectively. 
+
+      5.  Next we install Flask, Tensorflow, Keras and Pillow (for PIL) packages.  Finally, the last command  opens a jupyter notebook in the browser. 
 
 
-# Front End
+```{r  out.width = "60%", echo= FALSE}
+knitr::include_graphics('/img/jupyter0.png') 
+```
+Navigate to the **New** dropdown menu and click on **Text File**. Rename this file  `prediction_app.py`
+Back at **New** click on **Folder** to create a new folder. Rename it `static`. Inside this folder create a file and name it `prediction.html`
 
-##### 1. Load the neccessary libraries & the dataset
+```{r  out.width = "60%", echo= FALSE}
+knitr::include_graphics('/img/jupyter2.png') 
+```
+
+We will use the `prediction_app.py` and `prediction.html` files to build the flask app Back-End and Front-End respectively, as described in the following sections. 
+Buckle up!
+
+# Back-End
+
+##### 1. Load the neccessary libraries 
 
 
 ```{r setup, include= FALSE}
@@ -93,7 +124,7 @@ from flask import request
 from flask import jsonify 
 from flask import Flask
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
-from keras.applications.vgg19 import preprocess_input as VGG19_preprocess_input, VGG19
+from keras.applications.inception_v3 import preprocess_input as Inception_preprocess_input, InceptionV3
 from keras.preprocessing.image import img_to_array
 from keras.applications import imagenet_utils
 import tensorflow as tf
@@ -115,24 +146,23 @@ app = Flask(__name__)
 
 
 ##### 3a. Load the model
-The following function enables you to load your saved model or one of several pre-trained models that comes with Keras. 
+The following function enables you to load your earlier saved Deep Learning model or one of several pre-trained models that comes with Keras package. 
 
 ```{python, eval = FALSE}
 def load_model():
     global model, graph
-    model = Inception(weights="imagenet")
+    model = InceptionV3(weights="imagenet")
     print('--- Model loaded! ---')
     graph = tf.get_default_graph()
 ```
 
 
-In this example I am using the pre-trained model,  *Inception*, by Google. 
-
-Other  pre-trained models included in Keras package are  *VGG16*, *VGG19*, *ResNet50*, *Xception*, *MobileNet*. These state-of-the-art models are trained on ImageNet dataset, and they are commonly used in transfer learning to generalize classification outside of the ImageNet dataset. 
+In this example we are using the pre-trained model,  *InceptionV3*, designed by Google. 
+Other  pre-trained models included in the same package are  *VGG16*, *VGG19*, *ResNet50*, *Xception*, *MobileNet*. These state-of-the-art models are trained on ImageNet dataset, and are commonly used in transfer learning to generalize classification outside of the ImageNet dataset. 
 
 Loading your earlier saved model could be done using the following function:
 
-##### 3b. Loading saved model
+##### 3b. Loading an earlier saved model
 ```{python, evaluate = FALSE}
 def load_model():
     global model, graph
@@ -163,20 +193,20 @@ def prepare_image(image, target_size):
     image = image.resize(target_size)
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
-    image = imagenet_utils.preprocess_input(image)
+    image = Inception_preprocess_input(image) ## for pre-trained models, use preprocess input in line with  the model  used. For custom model can use imagenet_utils.preprocess_input()
 
     # return the processed image
     return image
 
 ```
-
+The function above will take in a given  image and return a resized - to the size specified by *target_size* -  and pre-preprocessed image ready for prediction. This function will be used within the *predict* function below. 
 
 ##### 5. Predict function
 
 ```{python, eval = FALSE}
 @app.route('/predict', methods = ['GET', 'POST']) 
 def predict():
-    # initialize the data dictionary that will be returned
+    # initialize the response dictionary that will be returned
     message = request.get_json(force = True)
     encoded = message['image']
     decoded = base64.b64decode(encoded)
@@ -188,78 +218,138 @@ def predict():
             prediction = decode_predictions(prediction, top= 1)
             response = {
                 'predictions':{
-                    'probability': np.array(prediction[0][0][2]).tolist(),     
-                    'label': np.array(prediction[0][0][1]).tolist()
+                     'label': np.array(prediction[0][0][1]).tolist(),
+                    'probability': np.array(prediction[0][0][2]).tolist()     
                 }
             }
-        
-
-         # return the data dictionary as a JSON response
+         # return the response dictionary as a JSON response
             return jsonify(response)
         else:
             return None, 'Error loading Image file'
-
-
 if __name__ == "__main__":
     print("\n*** Loading the Deep Learning Model ...... \n " )
     load_model()
     app.run()
 ```
 
-Copy and paste sub-sections, 1-5, above, with either 3a or 3b depending, in *prediction_app.py*
+In the snippet above, we have app route decorator with endpoint `predict` which allows both GET and POST requests as specified in methods parameter. 
 
-# Front end
+* In this function:
 
-We will make front end using html and javascript. Copy and paste the code and 
+    1.  The JSON from the client POST request is first defined as a variable called  **message**.  The base64 encoded image from this varible is obtained and  decoded. 
+    2. The decoded image is wrapped up by `io.BytesIO()` and then passed onto PIL Image instance, `Image.open()`, which then opens the image file.
+    3. The image is pre-processed through the *prepare_image* function and the returned image is passed onto the loaded model for prediction.
+    4. The predictions results are decoded and the top most is selected via `top = 1`. This is an array consisting of class Id, class name and the confidence of prediction.
+    5. A  variable called **response** is created. This is a python dictionary  with a key called `predictions` which is also a dictionary with two keys  `label` and `probability`.  The values for these keys are the results from model prediction. They are converted from numpy array to a python list in order for jsonify function to work. 
+    6. Finally, the **response** variable is converted to json, via jsonify function. This is what will be sent back to the client. 
+    
+    
+Copy and paste sub-sections, 1-5, above, with either 3a or 3b, in `prediction_app.py` file. Save your file. 
 
-You can adjust the *head* portion of the html to your liking. I will discuss 
+# Front-End
 
+We will make Front-End using html and javascript. The entire script is shown below. I will explain briefly some elements within this file.  
 
+The **head** portion of the html: This is trivial and you can  make edits  to your liking.   
 
+In the **body** section, we have:
+
+*  The Input element of type file, `<input id='Img-selector' type='file'>` , through which the user will browse and select images for predictions
+*  The `predict` button where the user will click to get the predictions.
+* A section with the header **Results**.  In this section there are two columns that floats next to each other, with headers **Predicted Object** and **Likelihood**. This is  where names of predicted images and their respective likelihood will be displayed upon prediction.
+* A paragraph with the header **Image** where the image selected using the *Img selector*  will be displayed. The source attribute in the Image tag ` <img id = 'selected-Img' src=''/>` specifies  the url of the image,  intially an empty string because no image is selected yet.
+
+We import jQuery via the script  `<script src = 'https://code.jquery.com/jquery-3.3.1.min.js'></script>`
+
+The second script tag embeds all the other javascript: 
+
+*  The jQuery **change** function triggers change event after the Image is selected from the browse button: 
+
+      1.  Load the file object via the FileReader
+      2.  Read the file from the file object and log the base64 encoded content to the console. 
+      3.  Clears the texts in the **Results** sections when a new image is selected. 
+
+* The jQuery **click** function details the events after the predict button is clicked. In the function: 
+
+    1.  A  message variable is defined whose **key** is *image* and the  **value** is the base64 encoded image. 
+    2.  A POST request is made to the predict endpoint (in the Back-End), with message variable converted to JSON 
+    3.  The response contains predictions **key** whose values are label of predicted image and the corresponding probability. (These are from the **repsonse** variable explained in the Back-End)
+    4. Once the response is obtained from the endpoint, the `object-name` and `object-prediction` are set to predictions label and the corresponding probability respectively.
+
+Copy the entire code below and paste it in `prediction.html` file. Save your file.
 
 ```{r,  eval = FALSE}
-
 <DOCTYPE html>
 <html>
-    <head>
-         <title> Richard Wanjohi, Ph.D Deep Learning </title>
-        <style>
-            * { font-size:20px; }
-        </style>
+    <head> <title> Richard Wanjohi, Ph.D Deep Learning </title>
+        <style> * { font-size:20px;} </style>
     </head>
-    <body> 
+    <body style="background-color:#FFF8DC;" > 
         <center> 
-        <input id='image-selector' type='file'>
-        <button id='predict-button' > Predict </button>
         <p style='font-weight:bold; color:green; font-family:verdana' > Image Recognition using Deep Learning Model </p>
-        <p>Object: <span id='object-name'></span></p>
-        <p>Likelihood: <span id='object-prediction'></span></p>
+        <br>
+        <input id='Img-selector' type='file'>
+        <button id='predict-button' > Predict </button>
+       <p> 
+       <style>* { box-sizing: border-box;}
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 200px; 
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+<h2>Results</h2>
+
+<div class="row">
+  <div class="column" style="background-color:#bbc; border-style:solid; border-color: black; border-width:2px">
+    <h2> Predicted Object </h2>
+    <p> <span id='object-name'; style=' color:blue; font-family:Comic Sans MS;' ></span></p> 
+  </div>
+  <div class="column" style="background-color:#bbc; border-style:solid; border-color: black;border-width:2px">
+    <h2>Likelihood </h2>
+    <p> <span id='object-prediction'; style='font-weight:bold; color:blue' ></span> </p>
+  </div>
+</div>
+       </p>
+        <h2> Image </h2>
+        <img id='selected-Img' src=""/>
         </center>
-        <img id='selected-image' src=""/>
         <script src = 'https://code.jquery.com/jquery-3.3.1.min.js'></script>
+
         <script>
-            let base64Image;
-            $("#image-selector").change(function() {
+            //Triggering change event after the Image is selected from the Browse Button 
+            let base64Img;
+            $("#Img-selector").change(function() {
                 let reader = new FileReader();
                 reader.onload = function(e){
                     let dataURL = reader.result;
-                    $('#selected-image').attr("src", dataURL);
-                    base64Image = dataURL.replace("data:image/jpeg;base64,","");
-                    console.log(base64Image);
+                    $('#selected-Img').attr("src", dataURL);
+                    base64Img = dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
+                    console.log(base64Img);
                 }
-                reader.readAsDataURL($("#image-selector")[0].files[0]);
+               // read the file from the file object
+                reader.readAsDataURL($("#Img-selector")[0].files[0]);
+                // the following clears the texts on the page when you select the next image
                 $("#object-name").text("");
                 $("#object-prediction").text("");
                 });
 
             $("#predict-button").click(function(event){
                 let message = {
-                    image: base64Image
+                    image: base64Img
                 }
                 console.log(message);
                 $.post("http://127.0.0.1:5000/predict", JSON.stringify(message), function(response){
-                    $("#object-name").text(response.prediction.label);
-                    $("#object-prediction").text(response.prediction.probability.toFixed(6));
+                    $("#object-name").text(response.predictions.label);
+                    $("#object-prediction").text(response.predictions.probability.toFixed(4));
                     console.log(response);
                 });
             });
@@ -268,22 +358,42 @@ You can adjust the *head* portion of the html to your liking. I will discuss
     </html>
 ```
 
-On the terminal, use Control-C to shut down the jupyter notebook.. then start the app as follows. 
+Back to the terminal, use Control-C to shut down the jupyter notebook, then start the Flask app as follows. 
 
 ```{}
 $ python3 prediction_app.py
 ```
-Then at the browser, paste `http://127.0.0.1:5000/static/predict.html` and you should see your front end
+
+If everything is correct, so far, you should see something similar to this:
+
+```{r  out.width = "70%", echo= FALSE}
+knitr::include_graphics('/img/running_app.png') 
+```
+
+
+Proceed to your browser and paste `http://127.0.0.1:5000/static/prediction.html` . You should see your Front-End
 
 ```{r  out.width = "70%", echo= FALSE}
 knitr::include_graphics('/img/output11.png') 
 ```
 
 
-Choose a file, a png or jpeg and click `Predict` and viola!
+Choose a file, a png or jpeg,  click `Predict` and .................. viola!!
 
 ```{r  out.width = "70%", echo= FALSE}
 knitr::include_graphics('/img/output10.png') 
 ```
+
+# Notes
+
+Regular ML models - regression or classification problems - can also be served using Flask web service. You will only need to tweak the **predict** function a bit and craft your Front-End accordingly. An undauntaing task, in my view. 
+
+In this tutorial, we only obtained the top most prediction result. To get more results, like the ones displayed in the figure above, use `top = 3`,  adjust the predictions dictionary in `prediction_app.py` and modify the **response** function in `prediction.html` accordingly. 
+
+Get the entire code from my [Git repo](https://github.com/rwanjohi/FlaskApp)
+
+# Related work
+
+Sentiment analyisis using Machine Learing models. The application build was deployed using  R  `shinyapps.io`. Details about the project are available [here](https://www.linkedin.com/pulse/sentiment-analysis-mapping-feelings-richard-wanjohi-ph-d/) and the application is  available [here](https://rwanjohi.shinyapps.io/myprojects/). Enjoy
 
 

@@ -38,9 +38,9 @@ library(knitr)
 
 
 
-```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+```{r pressure, echo=FALSE,  out.width = '70%'}
 
-knitr::include_graphics('C:/Users/Richard/my_blogs/gan.png') 
+knitr::include_graphics('/img/gan.png') 
 
 ```
 
