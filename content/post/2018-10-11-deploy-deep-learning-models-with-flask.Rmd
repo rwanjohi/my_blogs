@@ -256,7 +256,7 @@ In the **body** section, we have:
 
 *  The Input element of type file, `<input id='Img-selector' type='file'>` , through which the user will browse and select images for predictions
 *  The `predict` button where the user will click to get the predictions.
-* A section with the header **Results**.  In this section there are two columns that floats next to each other, with headers **Predicted Object** and **Likelihood**. This is  where names of predicted images and their respective likelihood will be displayed upon prediction.
+* A section with the header **Results**.  In this section there are two columns that floats next to each other, with headers **Predicted Object** and **Likelihood**. This is  where names of predicted images and their respective likelihood will be displayed upon prediction. The paragraphs in these columns are `object-name` and `object-prediction` respectively. 
 * A paragraph with the header **Image** where the image selected using the *Img selector*  will be displayed. The source attribute in the Image tag ` <img id = 'selected-Img' src=''/>` specifies  the url of the image,  intially an empty string because no image is selected yet.
 
 We import jQuery via the script  `<script src = 'https://code.jquery.com/jquery-3.3.1.min.js'></script>`
